@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/blankTemplate.xhtml">
+
+	<ui:define name="head">
+		<title>Login</title>
+	</ui:define>
+	
+	<ui:define name="content">
+	<style>
+		.loginBox {width:50%;text-align:0 auto;}
+	</style>
+		<h:form id="frmLogin">
+			<p:panel id="panelLogin" styleClass="loginBox">
+				<h:panelGrid columns="3">
+					<p:outputLabel value="#{globalMsg['common.txt.username']}" for="username"/>
+					<p:inputText id="username" value="#{loginView.username}"  required="true"/>
+					<p:message for="username"/>
+					
+					<p:outputLabel value="#{globalMsg['common.txt.password']}" for="password"/>
+					<p:password id="password" value="#{loginView.password}" required="true"/>
+					<p:message for="password"/>
+					
+				</h:panelGrid>
+				<p:commandButton id="btnSubmit" value="#{globalMsg['common.txt.btn.submit']}" 
+					actionListener="#{loginView.doLogin}" 
+					update="@form"
+					disabled="true">
+				</p:commandButton>
+			</p:panel>
+			<p:commandButton id="skipBtn" value="SKIP Login" action="/pages/cs/customer-enquiry?faces-redirect=true" update="@this" process="@this"/>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

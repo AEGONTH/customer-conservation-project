@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<f:view locale="#{language.localeCode}">
+		<h:head>
+			<f:facet name="first">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
+				<ui:remove><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /></ui:remove>
+				<meta charset="UTF-8"/>
+				<meta http-equiv="pragma" content="no-cache" />
+				<meta http-equiv="cache-control" content="no-cache" />
+				<meta http-equiv="expires" content="0" />
+				<link rel="shortcut icon" href="#{request.contextPath}/resources/image/ico/favicon.ico" type="image/x-icon" />
+				<link rel="icon" href="#{request.contextPath}/resources/image/ico/favicon.ico" type="image/x-icon"/>
+			</f:facet>
+			<h:outputStylesheet library="primeui" name="primeui-2.1-min.css"/>
+			<h:outputStylesheet library="css" name="custom-aegon.css" />
+			<ui:remove><h:outputStylesheet library="css" name="global.css" /></ui:remove>
+			
+			<style type="text/css">
+				body {margin:0px;}
+/* 				body {margin:0px;background-image: url("#{request.contextPath}/resources/image/bg/background.png");background-repeat:repeat;background-position:center;} */
+				.aegon-head{width:220px;}
+				.head-s {display:none;}
+				.txt-label-shadow {text-shadow: 0em 0.07em rgba(0, 0, 0, 0.2);}
+				.box-shadow-header {box-shadow: 0 0px 1px 0px #5D5D5D;}
+				.wrapper {height:auto;width:auto;max-width:75em; margin:0 auto;padding:0 0.5em;border: none;background: transparent;display:block;}
+				.headerBox {display:block;text-align:center;}
+				.header-color{background-color:#F1F1F1;}
+				.adamsLogo {background-image: url("#{request.contextPath}/resources/image/ADAMS_logo.png"); width:281px; height:90px;}
+				.adamsLogo-small {background-image: url("#{request.contextPath}/resources/image/ADAMS_logo-small.png"); width:150px; height:48px;}
+				.tableNoBorder {border: none !important; border-style: none !important; background: none !important;}
+				.submenuLanguage {width:inherit;}
+				.submenuLanguage > a.ui-state-active {background:inherit;}
+				.submenuLanguage .ui-menu {width:10em;}
+				.normal-menu {display:block;}
+			</style>
+			<ui:insert name="head" />
+		</h:head>
+		
+		<h:body >
+			<style>
+				@media screen and ( max-width :35em ) {
+					.btn-action {width:100%;margin-bottom:5px;}
+				}
+				@media screen and (max-width:24em) {
+					.lang-div {display:none;}
+					.aegon-head {width:150px;padding-top:1em;}
+					.head-normal {display:none;}
+					.head-s {display:block; margin:0 auto; text-align:center;}
+				}
+			</style>
+			<h:form id="frmHead">
+				<div style="height:8em;width:100%;" class="header-color box-shadow-header normal-menu">
+					<div class="wrapper" >
+						<p:panelGrid id="headTable" style="width:100%;" styleClass="tableNoBorder head-normal">
+							<p:row style="border:inherit !important;background:inherit;">
+								<p:column style="width:150px;border:inherit !important;background:inherit;">
+									<p:graphicImage value="/resources/image/aegon.png" styleClass="aegon-head"/>
+								</p:column>
+								<p:column style="text-align:center;border:inherit !important;background:inherit;">
+									
+								</p:column>
+								<p:column style="vertical-align: bottom; text-align: right; width:10em;border:inherit !important;background:inherit;">
+									<div class="lang-div">
+										<p:commandButton id="btnLang" value="Language" type="button" icon="fa fa-language fa-fw" styleClass="" style="border:none;background:none;color:#0079C2;" />
+									    <p:tieredMenu id="tireMenu" overlay="true" trigger="btnLang" my="center top" at="center bottom" 
+									    	model="#{language.languageMenuModel}"
+									    	style="width:10em;" styleClass="menu-language">
+									    </p:tieredMenu>
+									</div>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+						<div style="margin:0 auto;" class="head-s">
+							<p:graphicImage value="/resources/image/aegon.png" styleClass="aegon-head"/>
+						</div>
+					</div>
+				</div>
+				<div class="wrapper normal-menu" style="margin-top:-1.2em;margin-bottom:0.5em;">
+					<p:menubar styleClass="bottom-shadow">
+						<p:menuitem value="Main" containerStyleClass="menu-item" icon="fa fa-home fa-lg fa-fw" style="font-weight:bold;" action="/pages/main.jsf?faces-redirect=true"/>
+						<p:separator style="border:none;width:2px;height:22px;clear:none;margin:4px 6px 0;"/>
+						<p:menuitem id="menuCusEnq" value="Customer Enquiry" containerStyleClass="menu-item" icon="fa fa-search fa-lg fa-fw" action="/pages/cs/customer-enquiry.jsf?faces-redirect=true"/>
+						<ui:remove>
+						<f:facet name="options">
+							<div class="lang-div">
+								<p:commandButton id="btnLang2" value="Language" type="button" icon="fa fa-language fa-fw" styleClass="" style="border:none;background:none;color:#0079C2;" />
+							    <p:tieredMenu id="tireMenu2" overlay="true" trigger="btnLang2" my="center top" at="center bottom" 
+							    	model="#{language.languageMenuModel}"
+							    	style="width:10em;" styleClass="menu-language">
+							    </p:tieredMenu>
+							</div>
+						</f:facet>
+						</ui:remove>
+					</p:menubar>
+				</div>
+			</h:form>
+			
+			<div class="wrapper" style="margin-top:5px;">
+				<ui:insert name="content" />
+				<ui:include src="/rights-reserved.xhtml"/>
+			</div>
+			
+			<p:dialog widgetVar="progressDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" style="max-width:500px;">
+				<h:panelGrid columns="2">
+					<i class="fa fa-cog fa-spin fa-4x" style="margin-right: 12px; vertical-align: middle;"></i>
+					<h:outputText value="Please wait..." style="white-space: nowrap;"/>
+				</h:panelGrid>
+			</p:dialog>
+			
+			<pe:blockUI widgetVar="blockUIWidget"
+				css="{top: '20px', cursor: 'wait'}"
+				cssOverlay="{backgroundColor: 'black'}"
+				timeout="1500"
+				centerY="true">  
+			   <h:panelGrid columns="2">
+					<i class="fa fa-circle-o-notch fa-spin fa-4x" style="margin-right: 12px; vertical-align: middle;"></i>
+					<h:outputText value="Please wait..." style="white-space: nowrap;"/>
+				</h:panelGrid> 
+			</pe:blockUI>  
+			
+			<script type="text/javascript">
+			    function ScrollPage(location) {
+			        window.location.hash=location;
+			    }
+			</script>
+		</h:body>
+	</f:view>
+</html>
