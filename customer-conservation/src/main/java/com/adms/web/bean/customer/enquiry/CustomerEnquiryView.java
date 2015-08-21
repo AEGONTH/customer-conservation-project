@@ -329,9 +329,9 @@ public class CustomerEnquiryView extends BaseBean {
 					
 					, model.getLogRemark());
 				doVisibleLogHistory(model.getPolicy());
-			if(!updateLog) {
-				model.getPolicyCallLogs().add(0, callLog);
-			}
+//			if(!updateLog) {
+//				model.getPolicyCallLogs().add(0, callLog);
+//			}
 			clearAddCaseLog();
 			selectedCallLog = null;
 			rc.update("frmMain:panelLogHistTbl");
