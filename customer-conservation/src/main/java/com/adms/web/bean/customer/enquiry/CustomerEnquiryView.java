@@ -18,6 +18,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
@@ -312,7 +313,7 @@ public class CustomerEnquiryView extends BaseBean {
 			MessageUtils.getInstance().addErrorMessage("msgAddCase", "Please enter data in the required fields.");
 			rc.update("frmMain:panelLogDetail");
 		} else {
-			CallLog callLog = saveCallLog(
+			saveCallLog(
 					updateLog
 					, model.getPolicy()
 					, model.getLogDate()
@@ -328,10 +329,8 @@ public class CustomerEnquiryView extends BaseBean {
 					, model.getSuggestDetail()
 					
 					, model.getLogRemark());
-				doVisibleLogHistory(model.getPolicy());
-//			if(!updateLog) {
-//				model.getPolicyCallLogs().add(0, callLog);
-//			}
+			doVisibleLogHistory(model.getPolicy());
+			
 			clearAddCaseLog();
 			selectedCallLog = null;
 			rc.update("frmMain:panelLogHistTbl");
@@ -460,8 +459,8 @@ public class CustomerEnquiryView extends BaseBean {
 		try {
 			DetachedCriteria criteria = DetachedCriteria.forClass(Customer.class);
 			if(!StringUtils.isBlank(shCitizenId)) criteria.add(Restrictions.eq("citizenId", shCitizenId));
-			if(!StringUtils.isBlank(shFirstName)) criteria.add(Restrictions.like("firstName", "%" + shFirstName.trim().toUpperCase() + "%"));
-			if(!StringUtils.isBlank(shLastName)) criteria.add(Restrictions.like("lastName", "%" + shLastName.trim().toUpperCase() + "%"));
+			if(!StringUtils.isBlank(shFirstName)) criteria.add(Restrictions.like("firstName", shFirstName.trim().toUpperCase(), MatchMode.ANYWHERE));
+			if(!StringUtils.isBlank(shLastName)) criteria.add(Restrictions.like("lastName", shLastName.trim().toUpperCase(), MatchMode.ANYWHERE));
 			if(shDOB != null) criteria.add(Restrictions.eq("dob", shDOB));
 			
 			return customerService.findByCriteria(criteria);
