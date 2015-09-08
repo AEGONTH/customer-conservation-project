@@ -16,7 +16,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.adms.common.domain.BaseAuditDomain;
-import com.adms.entity.sale.Campaign;
 import com.adms.entity.sale.Sales;
 
 @Entity
@@ -33,13 +32,6 @@ public class CustomerYesRecord extends BaseAuditDomain {
 	@Column(name="IMPORT_DATE")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date importDate;
-	
-	@ManyToOne
-	@JoinColumn(name="CAMPAIGN_CODE", referencedColumnName="CAMPAIGN_CODE")
-	private Campaign campaign;
-	
-	@Column(name="LIST_LOT_CODE")
-	private String listLotCode;
 	
 	@Column(name="FILE_OWNER")
 	private String fileOwner;
@@ -65,8 +57,7 @@ public class CustomerYesRecord extends BaseAuditDomain {
 	private String insuredAccountNo;
 	
 	@Column(name="INSURED_ACCOUNT_EXPIRED_DATE")
-	@Temporal(TemporalType.DATE)
-	private Date insuredAccountExpiredDate;
+	private String insuredAccountExpiredDate;
 	
 	@Column(name="INSURED_ADDRESS_1")
 	private String insuredAddress1;
@@ -170,6 +161,15 @@ public class CustomerYesRecord extends BaseAuditDomain {
 
 	@Column(name="BENE_4_PERCENT", scale=10)
 	private String bene4Percent;
+
+	@Column(name="BENE_5_FIRST_NAME")
+	private String bene5FirstName;
+
+	@Column(name="BENE_5_LAST_NAME")
+	private String bene5LastName;
+
+	@Column(name="BENE_5_PERCENT", scale=10)
+	private String bene5Percent;
 	
 	@Column(name="EFFECTIVE_DATE")
 	@Temporal(TemporalType.DATE)
@@ -189,22 +189,6 @@ public class CustomerYesRecord extends BaseAuditDomain {
 
 	public void setImportDate(Date importDate) {
 		this.importDate = importDate;
-	}
-	
-	public Campaign getCampaign() {
-		return campaign;
-	}
-
-	public void setCampaign(Campaign campaign) {
-		this.campaign = campaign;
-	}
-
-	public String getListLotCode() {
-		return listLotCode;
-	}
-
-	public void setListLotCode(String listLotCode) {
-		this.listLotCode = listLotCode;
 	}
 
 	public String getFileOwner() {
@@ -247,11 +231,11 @@ public class CustomerYesRecord extends BaseAuditDomain {
 		this.insuredAccountNo = insuredAccountNo;
 	}
 
-	public Date getInsuredAccountExpiredDate() {
+	public String getInsuredAccountExpiredDate() {
 		return insuredAccountExpiredDate;
 	}
 
-	public void setInsuredAccountExpiredDate(Date insuredAccountExpiredDate) {
+	public void setInsuredAccountExpiredDate(String insuredAccountExpiredDate) {
 		this.insuredAccountExpiredDate = insuredAccountExpiredDate;
 	}
 
@@ -549,6 +533,30 @@ public class CustomerYesRecord extends BaseAuditDomain {
 
 	public void setSales(Sales sales) {
 		this.sales = sales;
+	}
+
+	public String getBene5FirstName() {
+		return bene5FirstName;
+	}
+
+	public void setBene5FirstName(String bene5FirstName) {
+		this.bene5FirstName = bene5FirstName;
+	}
+
+	public String getBene5LastName() {
+		return bene5LastName;
+	}
+
+	public void setBene5LastName(String bene5LastName) {
+		this.bene5LastName = bene5LastName;
+	}
+
+	public String getBene5Percent() {
+		return bene5Percent;
+	}
+
+	public void setBene5Percent(String bene5Percent) {
+		this.bene5Percent = bene5Percent;
 	}
 	
 }
