@@ -14,6 +14,23 @@ public class FileTransfer {
 	
 	private static final int DEFAULT_BUFFER_SIZE = 512;
 	
+//	Adobe PDF
+	public static final String CONTENT_TYPE_PDF = "application/pdf";
+
+//	Microsoft Office
+	public static final String CONTENT_TYPE_XLS = "application/vnd.ms-excel";
+	public static final String CONTENT_TYPE_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+	public static final String CONTENT_TYPE_DOC = "application/msword";
+	public static final String CONTENT_TYPE_DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+	
+	public static final String CONTENT_TYPE_TXT = "text/plain";
+
+//	Compress Application
+	public static final String CONTENT_TYPE_7ZIP = "application/x-7z-compressed";
+	public static final String CONTENT_TYPE_ZIP = "application/zip";
+	
+//	for further more: http://www.freeformatter.com/mime-types-list.html
+	
 	/**
 	 * 
 	 * @param fileName The file name with extension.
@@ -21,13 +38,14 @@ public class FileTransfer {
 	 * @param content The content by byte[].
 	 * @throws IOException throws exception while do writing file out.
 	 */
-	public void downloadFile(String fileName, String contentType, byte[] content) throws IOException {
+	public void fileDownload(String fileName, String contentType, byte[] content) throws IOException {
 		
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		ExternalContext ec = facesContext.getExternalContext();
 
 		ec.responseReset();
 		ec.setResponseContentType(contentType);
+		ec.setResponseContentLength(content.length);
 		ec.setResponseHeader("Content-Disposition", "attachment); filename=\"" + fileName + "\"");
 		
 		OutputStream outputStream = null;
@@ -63,7 +81,7 @@ public class FileTransfer {
 	 * @param file The file.
 	 * @throws IOException throws exception while do writing file out.
 	 */
-	public void downloadFile(String fileName, String contentType, File file) throws IOException {
+	public void fileDownload(String fileName, String contentType, File file) throws IOException {
 		byte[] bs = new byte[(int) file.length()];
 		InputStream in = null;
 		try {
@@ -78,6 +96,6 @@ public class FileTransfer {
 			} catch(IOException e) {}
 		}
 		
-		downloadFile(fileName, contentType, bs);
+		fileDownload(fileName, contentType, bs);
 	}
 }
