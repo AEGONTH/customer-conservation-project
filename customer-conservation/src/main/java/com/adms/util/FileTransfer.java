@@ -1,6 +1,7 @@
 package com.adms.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,6 +10,8 @@ import java.io.OutputStream;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+
+import org.apache.poi.ss.usermodel.Workbook;
 
 public class FileTransfer {
 	
@@ -39,7 +42,6 @@ public class FileTransfer {
 	 * @throws IOException throws exception while do writing file out.
 	 */
 	public void fileDownload(String fileName, String contentType, byte[] content) throws IOException {
-		
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		ExternalContext ec = facesContext.getExternalContext();
 
@@ -97,5 +99,37 @@ public class FileTransfer {
 		}
 		
 		fileDownload(fileName, contentType, bs);
+	}
+	
+	public void fileDownload(String fileName, Workbook workbook) throws IOException {
+		ByteArrayOutputStream bos = null;
+		OutputStream os = null;
+		try {
+			String contentType = fileName.endsWith(".xls") ? CONTENT_TYPE_XLS : CONTENT_TYPE_XLSX;
+			bos = new ByteArrayOutputStream();
+//			fileDownload(fileName, contentType, bos.toByteArray());
+			
+			FacesContext fc = FacesContext.getCurrentInstance();
+			ExternalContext ec = fc.getExternalContext();
+
+			workbook.write(bos);
+			
+			ec.responseReset();
+			ec.setResponseContentType(contentType);
+			ec.setResponseContentLength(bos.size());
+			ec.setResponseHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+			
+			os = ec.getResponseOutputStream();
+			workbook.write(os);
+			fc.responseComplete();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {bos.flush();} catch(Exception e) {}
+			try {bos.close();} catch(Exception e) {}
+			try {os.flush();} catch(Exception e) {}
+			try {os.close();} catch(Exception e) {}
+			try {workbook.close();} catch(Exception e) {}
+		}
 	}
 }

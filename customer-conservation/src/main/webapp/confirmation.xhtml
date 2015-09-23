@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/templates/mainTemplate.xhtml">
+
+	<ui:define name="head">
+		<f:loadBundle var="msg" basename="com.adms.msg.cs.csMsg"/>
+		<title>Confirmation</title>
+		<style>
+			.box-btn{min-height: 5em;}
+		</style>
+	</ui:define>
+	
+	<ui:define name="headerCenterContent">
+	
+	</ui:define>
+	
+	<ui:define name="content">
+		<h:form id="frmConfMain">
+			<p:panelGrid columns="3" layout="grid" styleClass="grid-borderless grid-row-gap">
+				<p:commandButton value="File Upload" icon="fa fa-upload fa-2x fa-fw"
+				process="@this" action="#{confirmationView.toFileUploadPage}" styleClass="w100 btn-orange btn-no-shadow box-btn"/>
+				
+				<p:commandButton value="Log Status" icon="fa fa-plus-circle fa-2x fa-fw" action="#{confirmationView.toAddLogPage}"
+				process="@this" styleClass="w100 btn-green btn-no-shadow box-btn"/>
+				
+				<p:commandButton value="File Download" icon="fa fa-cloud-download fa-2x fa-fw" action="#{confirmationView.toFileDownloadPage}"
+				process="@this" styleClass="w100 btn-primary btn-no-shadow box-btn"/>
+			</p:panelGrid>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

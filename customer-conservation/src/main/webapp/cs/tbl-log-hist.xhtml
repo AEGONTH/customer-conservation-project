@@ -110,7 +110,7 @@
 			
 			<p:panel id="logCaseWrapper" styleClass="custom-panel" style="padding:0;">
 				<p:focus for="@next"/>
-				<p:panelGrid id="panelLogDetail" columns="2" columnClasses="ui-grid-col-6, ui-grid-col-6" layout="grid" styleClass="grid-no-border grid-separate-less w100 dialog-case">
+				<p:panelGrid id="panelLogDetail" columns="2" columnClasses="ui-grid-col-6, ui-grid-col-6" layout="grid" styleClass="grid-borderless w100 dialog-case">
 					<p:panel styleClass="custom-panel w100 ui-custom-fluid" style="padding:0;">
 						<p:outputLabel value="Source" for="@next" styleClass="label-content-head-dialog"/>
 						<p:selectOneMenu id="logSourceName" value="#{customerEnquiryView.model.selectedSource}" disabled="#{customerEnquiryView.updateLog}" styleClass="" style="">
@@ -143,7 +143,7 @@
 					</p:panel>
 				</p:panelGrid>
 				
-				<p:panelGrid id="panelLogDetail2" columns="1" layout="grid" styleClass="grid-no-border grid-separate-less w100 dialog-case">
+				<p:panelGrid id="panelLogDetail2" columns="1" layout="grid" styleClass="grid-borderless w100 dialog-case">
 					<p:panel styleClass="custom-panel w100 ui-custom-fluid" style="padding:0;">
 						<p:outputLabel value="Detail" styleClass="label-content-head-dialog"/>
 						<p:inputTextarea value="#{customerEnquiryView.model.logDetail}" disabled="#{customerEnquiryView.updateLog}" styleClass="w100 " style="min-height:5em;"/>
@@ -152,7 +152,7 @@
 				
 				<hr class="carved" style="margin-top:0;margin-bottom:0.5em;"/>
 				
-				<p:panelGrid id="panelLogInvestigate" columns="2" columnClasses="ui-grid-col-6, ui-grid-col-6" layout="grid" styleClass="grid-no-border grid-separate-less w100 dialog-case">
+				<p:panelGrid id="panelLogInvestigate" columns="2" columnClasses="ui-grid-col-6, ui-grid-col-6" layout="grid" styleClass="grid-borderless w100 dialog-case">
 					<p:panel styleClass="custom-panel w100 ui-custom-fluid" style="padding:0;">
 						<p:outputLabel value="Current Status" for="@next" styleClass="label-content-head-dialog"/>
 						<p:selectOneMenu id="currentStatus" value="#{customerEnquiryView.model.selectedComplaintStatus}" styleClass="" style="">
@@ -171,7 +171,7 @@
 					</p:panel>
 				</p:panelGrid>
 				
-				<p:panelGrid id="panelLogInvestigate2" columns="2" columnClasses="ui-grid-col-6, ui-grid-col-6" layout="grid" styleClass="grid-no-border grid-separate-less w100 dialog-case">
+				<p:panelGrid id="panelLogInvestigate2" columns="2" columnClasses="ui-grid-col-6, ui-grid-col-6" layout="grid" styleClass="grid-borderless w100 dialog-case">
 					<p:panel styleClass="custom-panel w100 ui-custom-fluid" style="padding:0;">
 						<p:outputLabel value="Corrective Action" styleClass="label-content-head-dialog"/>
 						<p:inputTextarea value="#{customerEnquiryView.model.correctiveAction}"  styleClass="w100"/>
@@ -182,7 +182,7 @@
 					</p:panel>
 				</p:panelGrid>
 				
-				<p:panelGrid id="panelLogRemark" columns="1" layout="grid" styleClass="grid-no-border grid-separate-less w100 dialog-case">
+				<p:panelGrid id="panelLogRemark" columns="1" layout="grid" styleClass="grid-borderless w100 dialog-case">
 						<p:outputLabel value="Remark" styleClass="label-content-head-dialog"/>
 						<p:inputTextarea value="#{customerEnquiryView.model.logRemark}"  styleClass="w100"/>
 				</p:panelGrid>

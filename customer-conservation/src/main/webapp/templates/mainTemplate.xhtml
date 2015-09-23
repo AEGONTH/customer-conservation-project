@@ -10,7 +10,6 @@
 		<h:head>
 			<f:facet name="first">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
-				<ui:remove><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /></ui:remove>
 				<meta charset="UTF-8"/>
 				<meta http-equiv="pragma" content="no-cache" />
 				<meta http-equiv="cache-control" content="no-cache" />
@@ -19,7 +18,6 @@
 				<link rel="icon" href="#{request.contextPath}/resources/image/ico/favicon.ico" type="image/x-icon"/>
 			</f:facet>
 			<h:outputStylesheet library="css" name="custom-aegon.css" />
-			<ui:remove><h:outputStylesheet library="css" name="global.css" /></ui:remove>
 			
 			<style type="text/css">
 				body {margin:0px;}
@@ -38,13 +36,14 @@
 				.submenuLanguage > a.ui-state-active {background:inherit;}
 				.submenuLanguage .ui-menu {width:10em;}
 				.normal-menu {display:block;}
+				li.ui-separator.ui-state-default.menu-separate {border:none;width:2px;height:22px;clear:none;margin:4px 6px 0;}
 			</style>
 			<ui:insert name="head" />
 		</h:head>
 		
 		<h:body >
 			<style>
-				@media screen and ( max-width :35em ) {
+				@media screen and (max-width:35em) {
 					.btn-action {width:100%;margin-bottom:5px;}
 				}
 				@media screen and (max-width:24em) {
@@ -83,10 +82,13 @@
 				</div>
 				<div class="wrapper normal-menu" style="margin-top:-1.2em;margin-bottom:0.5em;">
 					<p:menubar styleClass="bottom-shadow">
-						<p:menuitem value="Main" containerStyleClass="menu-item" icon="fa fa-home fa-lg fa-fw" style="font-weight:bold;" action="/cs?faces-redirect=true"/>
-						<p:separator style="border:none;width:2px;height:22px;clear:none;margin:4px 6px 0;"/>
+						<p:menuitem value="Main" containerStyleClass="menu-item" icon="fa fa-home fa-lg fa-fw" style="font-weight:bold;" action="/main?faces-redirect=true"/>
+						<p:separator styleClass="menu-separate"/>
 						<p:menuitem id="menuCusEnq" value="Customer Enquiry" containerStyleClass="menu-item" icon="fa fa-search fa-lg fa-fw" action="/cs/customer-enquiry?faces-redirect=true"/>
-						<ui:remove>
+						<p:separator styleClass="menu-separate"/>
+						<p:menuitem id="menuConfirm" value="Confirmation Call" containerStyleClass="menu-item" icon="fa fa-phone-square fa-lg fa-fw" action="/confirmation?faces-redirect=true"/>
+						
+						<ui:remove><!-- language selection -->
 						<f:facet name="options">
 							<div class="lang-div">
 								<p:commandButton id="btnLang2" value="Language" type="button" icon="fa fa-language fa-fw" styleClass="" style="border:none;background:none;color:#0079C2;" />
@@ -103,6 +105,8 @@
 			
 			<div class="wrapper" style="margin-top:5px;">
 				<ui:insert name="content" />
+			</div>
+			<div class="wrapper" style="margin-top:5px;">
 				<ui:include src="/rights-reserved.xhtml"/>
 			</div>
 			
@@ -112,17 +116,6 @@
 					<h:outputText value="Please wait..." style="white-space: nowrap;"/>
 				</h:panelGrid>
 			</p:dialog>
-			
-			<pe:blockUI widgetVar="blockUIWidget"
-				css="{top: '20px', cursor: 'wait'}"
-				cssOverlay="{backgroundColor: 'black'}"
-				timeout="1500"
-				centerY="true">  
-			   <h:panelGrid columns="2">
-					<i class="fa fa-circle-o-notch fa-spin fa-4x" style="margin-right: 12px; vertical-align: middle;"></i>
-					<h:outputText value="Please wait..." style="white-space: nowrap;"/>
-				</h:panelGrid> 
-			</pe:blockUI>  
 			
 			<script type="text/javascript">
 			    function ScrollPage(location) {

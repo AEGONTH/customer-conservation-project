@@ -11,7 +11,7 @@
 
 	<error-page>
 		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
-		<location>/index.html</location>
+		<location>/main.xhtml</location>
 	</error-page>
 
 	<context-param>

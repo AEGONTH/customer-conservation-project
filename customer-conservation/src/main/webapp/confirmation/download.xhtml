@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/templates/mainTemplate.xhtml">
+	
+	<ui:define name="head">
+		
+		<title>Download</title>
+		<style>
+			.ui-panelgrid-cell.padding-r2{padding:0px 2px 0px 0px;}
+			.ui-panelgrid-cell.padding-l2{padding:0px 0px 0px 2px;}
+			.padding-0.ui-panelgrid-cell{padding:0;}
+			.dl-box{width:auto; max-width:35em;}
+		</style>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="frmDL">
+			<p:panel id="panelDL" header="File Donwload" styleClass="bottom-shadow">
+				<p:messages id="msgDialogDL" globalOnly="false" closable="true" autoUpdate="false"/>
+				<div class=" dl-box">
+					<p:panelGrid id="gridDL" columns="2" layout="grid" columnClasses="" styleClass="grid-borderless">
+						<h:outputText value="From" />
+						<p:selectOneMenu value="#{fileDownloadView.selectedDateFrom}" styleClass="w100" style="margin-top:-5px;">
+							<p:ajax process="@this" listener="#{fileDownloadView.cycleListener}" update="cycleTo"/>
+							<f:selectItems value="#{fileDownloadView.selectionCycleFrom}"/>
+						</p:selectOneMenu>
+					
+						<h:outputText value="To" />
+						<p:selectOneMenu id="cycleTo" value="#{fileDownloadView.selectedDateTo}" disabled="#{fileDownloadView.selectedDateFrom eq null}" styleClass="w100" style="margin-top:-5px;">
+							<f:selectItems value="#{fileDownloadView.selectionCycleTo}"/>
+						</p:selectOneMenu>
+					</p:panelGrid>
+						
+					<h:panelGrid columns="2" styleClass="w100" columnClasses="ui-grid-col-6, ui-grid-col-6">
+						<p:commandButton id="btnSearchSubmit" value="Download" ajax="false"
+							action="#{fileDownloadView.doDownload}"
+							update="@form"
+							styleClass="btn-green btn-no-shadow w100"
+							style="height:2.5em;"/>
+						
+						<p:commandButton value="Cancel" process="@this" oncomplete="PF('downloadDlg').hide()" update="@form" styleClass="btn-red btn-no-shadow w100" style="height:2.5em;">
+							<p:resetInput target="@form" />
+						</p:commandButton>
+					</h:panelGrid>
+				</div>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

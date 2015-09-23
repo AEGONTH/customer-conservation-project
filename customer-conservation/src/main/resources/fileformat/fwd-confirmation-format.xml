@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FileFormat fileName="" fileType="xls" locale="US">
+	<DataSet description="Confirmation Data">
+		<DataSheet sheetName="" sheetIndex="0">
+			<DataCell row="1" column="A" dataType="TEXT" fieldName="companyName" autoTrim="TRUE" />
+			<DataCell row="2" column="A" dataType="TEXT" fieldName="periodTxt" autoTrim="TRUE" />
+			
+			<DataRecord listSourceName="dataList" beginRow="6" endRow="9999">
+				
+				<DataCell row="1" column="A" dataType="TEXT" fieldName="no" autoTrim="TRUE"/>
+				<DataCell row="1" column="B" dataType="TEXT" fieldName="appDateYear" autoTrim="TRUE" />
+				<DataCell row="1" column="C" dataType="TEXT" fieldName="appDateMonth" autoTrim="TRUE" />
+				<DataCell row="1" column="D" dataType="TEXT" fieldName="appDateDay" autoTrim="TRUE" />
+				<DataCell row="1" column="E" dataType="TEXT" fieldName="settleYear" autoTrim="TRUE" />
+				<DataCell row="1" column="F" dataType="TEXT" fieldName="settleMonth" autoTrim="TRUE" />
+				<DataCell row="1" column="G" dataType="TEXT" fieldName="settleDay" autoTrim="TRUE" />
+				<DataCell row="1" column="H" dataType="TEXT" fieldName="policyNo" autoTrim="TRUE" />
+				<DataCell row="1" column="I" dataType="TEXT" fieldName="planCode" autoTrim="TRUE" />
+				<DataCell row="1" column="J" dataType="TEXT" fieldName="insuredName" autoTrim="TRUE" />
+				<DataCell row="1" column="K" dataType="NUMBER" fieldName="modalPremium" />
+				<DataCell row="1" column="L" dataType="NUMBER" fieldName="ape" />
+				<DataCell row="1" column="M" dataType="NUMBER" fieldName="sumInsured" />
+				<DataCell row="1" column="N" dataType="TEXT" fieldName="mode" autoTrim="TRUE" />
+				<DataCell row="1" column="O" dataType="TEXT" fieldName="status" autoTrim="TRUE" />
+				<DataCell row="1" column="P" dataType="TEXT" fieldName="unitCode" autoTrim="TRUE" />
+				<DataCell row="1" column="Q" dataType="TEXT" fieldName="bankCard" autoTrim="TRUE" />
+				<DataCell row="1" column="R" dataType="TEXT" fieldName="creditCardNo" autoTrim="TRUE" />
+				<DataCell row="1" column="S" dataType="TEXT" fieldName="expiredDate" autoTrim="TRUE" />
+				<DataCell row="1" column="T" dataType="TEXT" fieldName="birthdayYear" autoTrim="TRUE" />
+				<DataCell row="1" column="U" dataType="TEXT" fieldName="birthdayMonth" autoTrim="TRUE" />
+				<DataCell row="1" column="V" dataType="TEXT" fieldName="birthdayDay" autoTrim="TRUE" />
+				<DataCell row="1" column="W" dataType="TEXT" fieldName="citizenId" autoTrim="TRUE" />
+				<DataCell row="1" column="X" dataType="TEXT" fieldName="address1" autoTrim="TRUE" />
+				<DataCell row="1" column="Y" dataType="TEXT" fieldName="address2" autoTrim="TRUE" />
+				<DataCell row="1" column="Z" dataType="TEXT" fieldName="address3" autoTrim="TRUE" />
+				<DataCell row="1" column="AA" dataType="TEXT" fieldName="province" autoTrim="TRUE" />
+				<DataCell row="1" column="AB" dataType="TEXT" fieldName="postCode" autoTrim="TRUE" />
+				<DataCell row="1" column="AC" dataType="TEXT" fieldName="tel1" autoTrim="TRUE" />
+				<DataCell row="1" column="AD" dataType="TEXT" fieldName="tel2" autoTrim="TRUE" />
+				<DataCell row="1" column="AE" dataType="TEXT" fieldName="tel3" autoTrim="TRUE" />
+				<DataCell row="1" column="AF" dataType="TEXT" fieldName="mobile1" autoTrim="TRUE" />
+				<DataCell row="1" column="AG" dataType="TEXT" fieldName="mobile2" autoTrim="TRUE" />
+				<DataCell row="1" column="AH" dataType="TEXT" fieldName="tsrName" autoTrim="TRUE" />
+		
+				<EndRecordCondition column="A" comparator="BLANK" checkValue="" />
+				
+			</DataRecord>
+		</DataSheet>
+		
+	</DataSet>
+</FileFormat>

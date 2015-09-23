@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/templates/mainTemplate.xhtml">
+
+	<ui:define name="head">
+		
+		<title>File Upload</title>
+		<style>
+			.fileupload-custom {width:auto;}
+			.fileupload-custom .ui-fileupload-buttonbar.ui-widget-header, .ui-fileupload-content.ui-widget-content {background-color: transparent; border: none;}
+			.fileupload-custom .ui-fileupload-buttonbar .ui-button.ui-widget.ui-state-default {color:#FFF;}
+			.fileupload-custom .ui-fileupload-buttonbar .ui-button.ui-widget.ui-state-default:active {box-shadow:inset 0 2px 2px rgba(0,0,0,0.2);}
+			.fileupload-custom .ui-fileupload-buttonbar .ui-button-icon-left.ui-icon.ui-c {background-image: url("/customer-conservation/javax.faces.resource/images/ui-icons_ffffff_256x240.png.xhtml?ln=primefaces-bootstrap");}
+			
+			/* Choose Button */
+			.fileupload-custom .ui-fileupload-buttonbar .ui-button.ui-widget.ui-state-default.ui-fileupload-choose {background: #57C357 no-repeat; border:1px solid transparent;}
+			.fileupload-custom .ui-fileupload-buttonbar .ui-button.ui-widget.ui-state-default.ui-fileupload-choose:hover {background:#4FDE4F;}
+			
+			/* Upload Button */
+			.fileupload-custom .ui-fileupload-buttonbar .ui-button.ui-widget.ui-state-default.ui-fileupload-upload {background: #337ab7 no-repeat; border:1px solid transparent;}
+			.fileupload-custom .ui-fileupload-buttonbar .ui-button.ui-widget.ui-state-default.ui-fileupload-upload:hover {background: #599bd0;}
+			
+			/* Cancel Button */
+			.fileupload-custom .ui-fileupload-buttonbar .ui-button.ui-widget.ui-state-default.ui-fileupload-cancel {background: #E53935 no-repeat; border:1px solid transparent;}
+			.fileupload-custom .ui-fileupload-buttonbar .ui-button.ui-widget.ui-state-default.ui-fileupload-cancel:hover {background: #DD151B;}
+		</style>
+	</ui:define>
+	
+	<ui:define name="headerCenterContent">
+	
+	</ui:define>
+	
+	<ui:define name="content">
+		<h:form enctype="multipart/form-data">
+			<p:panel header="File Uploader" styleClass="bottom-shadow">
+				<p:messages id="msgUpload" globalOnly="false" closable="true"/>
+				<p:fileUpload id="fileUpload" fileUploadListener="#{fileUploadView.handleFileUpload}"
+				mode="advanced"
+				allowTypes="/(\.|\/)(xls|xlsx)$/"
+				sizeLimit="1000000000"
+				multiple="false"
+				process="@form"
+				update="@form"
+				styleClass="fileupload-custom"
+				style="margin-top:3px;"/>
+				
+				<div class="w100">
+					<p:selectBooleanCheckbox value="#{fileUploadView.needPwd}" itemLabel="Password required">
+			            <p:ajax update="excelPwd" />
+			        </p:selectBooleanCheckbox>
+		        </div>
+				<div class="w100">
+					<p:password id="excelPwd" value="#{fileUploadView.excelPwd}" disabled="#{!fileUploadView.needPwd}"/>
+				</div>
+			</p:panel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

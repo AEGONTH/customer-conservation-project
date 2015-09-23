@@ -6,6 +6,7 @@
 .fs12{font-size:12px !important;}
 .aegon-color {color:rgb(0,92,174);}
 
+.bold {font-weight: bold;}
 .txt-center {text-align: center;}
 .txt-left {text-align: left;}
 .txt-right {text-align: right;}
@@ -16,6 +17,11 @@
 .hidden {display:none}
 
 .ui-widget-header {background:#005CAE no-repeat;}
+
+.container100 {
+    width: 100%;
+    float: left;
+}
 
 /* Data Table */
 .ui-datatable-tablewrapper .ui-state-default, .ui-widget-content.ui-state-default {background: #EAF4FD no-repeat;}
@@ -105,10 +111,10 @@ hr.carved {
 }
 .btn-shadow {box-shadow: 0 4px 2px -2px gray;}
 .btn-no-shadow {box-shadow:none;}
-.btn-shadow:active, .btn-no-shadow:active {box-shadow:inset 0 2px 2px gray;}
+.btn-shadow:active, .btn-no-shadow:active {box-shadow:inset 0 2px 2px rgba(0,0,0,0.2);}
 
-.ui-button.btn-default {background:#EAF4FD no-repeat;color: #1d5987; border-color:#c5dbec;}
-.ui-button.btn-default:hover {background:#E5F3FF no-repeat;}
+.btn-default .ui-button.ui-widget.ui-state-default, .ui-button.btn-default {background:#0288D1 no-repeat;color: #F1F6F9; border:1px solid transparent}
+.ui-button.btn-default:hover {background:#29A1EC no-repeat;}
 
 .ui-button.btn-green {background:#5CB85C no-repeat;}
 .ui-button.btn-green:hover {background:#3AC162;border-color:#7FD67F;}
@@ -116,20 +122,116 @@ hr.carved {
 .ui-button.btn-yellow {background:#EB9316 no-repeat;}
 .ui-button.btn-yellow:hover {background:#f1b058;border: 1px solid rgb(255,187,91);}
 
+.ui-button.btn-orange {background-color: #FB8C00;}
+.ui-button.btn-orange:hover {background-color: #FCA537;}
+
 .ui-button.btn-primary {background:#337ab7 no-repeat;}
-.ui-button.btn-primary:hover {background:#599bd0;border: 1px solid #245580;}
+.ui-button.btn-primary:hover {background:#599bd0; border: 1px solid #7CC2FF;}
 
 .ui-button.btn-red {background:#D0525D no-repeat;}
 .ui-button.btn-red:hover {background:#C3303D; border-color:#C3303D;}
 
-.ui-button.btn-green, .ui-button.btn-yellow, .ui-button.btn-red, .ui-button.btn-primary {color:#FFF;border: 1px solid transparent;}
+.ui-button.btn-green, .ui-button.btn-yellow, .ui-button.btn-orange, .ui-button.btn-red, .ui-button.btn-primary {color:#FFF;border: 1px solid transparent;}
+
+/* ## Fix Font Awesome Icon ## */
+/* ## Fix .fa-2x position ## */
+.ui-button-icon-only .ui-icon.fa.fa-2x, 
+.ui-button-text-icon-left .ui-icon.fa.fa-2x, 
+.ui-button-text-icon-right .ui-icon.fa.fa-2x {margin-top:-14px}
+
+/* ## Fix Select One Menu width 100% ## */
+.w100.ui-selectonemenu.ui-widget {width:100% !important;}
+.w100.ui-selectonemenu.ui-widget .ui-selectonemenu-label.ui-inputfield {width:95% !important;}
 
 /* ## Custom Icon ## */
 .ui-menuitem-icon.ui-flag-th {background: url('../resources/image/flag30/thailand.png') no-repeat;}
 .ui-menuitem-icon.ui-flag-us {background: url('../resources/image/flag30/usa.png') no-repeat;}
 .ui-menuitem-icon.ui-icon.custom-icon-fw {background-size: 16px;padding-right: 0.3em;}
 
+/* ## Custom Checkbox ## */
+.ui-selectmanycheckbox label {
+  margin: -1px 15px 0px 0px !important;
+  color: #546e7a;
+  font-size: 14px;
+}
+.ui-chkbox .ui-chkbox-box {
+  background: none;
+  box-shadow: none;
+  margin-right: 5px;
+  margin-top: 2px;
+  color: #a9a9a9;
+  border: solid 1px #546e7a;
+  cursor: pointer;
+  width: 16px !important;
+  height: 16px !important;
+  background-color: #ffffff;
+}
+.ui-chkbox .ui-state-active {
+  border-color: #546e7a;
+}
+.ui-chkbox .ui-state-focus {
+  outline: dotted 1px #778d9b;
+  outline-offset: 2px;
+}
+.ui-chkbox-box .ui-icon-blank {
+  background-image: none !important;
+  background-size: 100%;
+  background-position: center;
+  border-bottom: solid 2px transparent;
+  border-right: solid 2px transparent;
+  width: 5px;
+  height: 10px;
+  position: relative;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  -webkit-transform: rotate(0deg) scale(1);
+  -moz-transform: rotate(0deg) scale(1);
+  -o-transform: rotate(0deg) scale(1);
+  -ms-transform: rotate(0deg) scale(1);
+  transform: rotate(0deg) scale(1);
+}
+.ui-chkbox-box .ui-icon-check {
+  border-radius: 0px;
+  background-image: none !important;
+  background-size: 100%;
+  position: relative;
+  background-position: center;
+  background-color: transparent;
+  border-bottom: solid 3px #26C6DA;
+  border-right: solid 3px #26C6DA;
+  width: 5px;
+  height: 10px;
+  margin-left: 4px;
+  margin-top: -4px;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  -webkit-transform: rotate(45deg) scale(1.7);
+  -moz-transform: rotate(45deg) scale(1.7);
+  -o-transform: rotate(45deg) scale(1.7);
+  -ms-transform: rotate(45deg) scale(1.7);
+  transform: rotate(45deg) scale(1.7);
+}
+.ui-chkbox .ui-chkbox-label {
+  margin: 3px 15px 0px 5px !important;
+  font-size: 14px;
+  color: #546e7a;
+}
+
 /* for Responsive */
 .ui-custom-fluid div {width:100%;}
 .ui-custom-fluid .ui-selectonemenu {width:100% !important;}
 .ui-custom-fluid .ui-selectonemenu .ui-selectonemenu-label {width:95% !important;}
+
+/* ## Custom Grid ## */
+.grid-borderless.ui-panelgrid .ui-panelgrid-content.ui-grid.ui-grid-responsive {border:0}
+.grid-row-gap div.ui-grid-row {padding-bottom:0.5em;}
+.grid-row-gap div.ui-grid-row .ui-panelgrid-cell.grid-label-col.ui-grid-col-6 {margin-top:5px;} 
+@media (max-width: 35em) {
+	.grid-borderless.ui-panelgrid .ui-grid-responsive .ui-grid-row {border-top:0;}
+}

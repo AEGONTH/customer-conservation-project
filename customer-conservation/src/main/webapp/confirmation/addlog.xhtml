@@ -1,0 +1,193 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/templates/mainTemplate.xhtml">
+
+	<ui:define name="head">
+		
+		<title>Log Status</title>
+		<style>
+			.container-search{width:100%;}
+			.padding-0.ui-panelgrid-cell{padding-left:0px;padding-right:0px}
+			.grid-borderless .ui-grid.ui-panelgrid-content.ui-grid-responsive .ui-grid-row .ui-panelgrid-cell input.ui-inputfield
+			, .grid-borderless .ui-grid.ui-panelgrid-content.ui-grid-responsive .ui-grid-row .ui-panelgrid-cell .ui-selectonemenu {margin-top:-5px;}
+			.grid-borderless .ui-panelgrid-content.ui-grid.ui-grid-responsive .ui-grid-row {margin-bottom:0.5em;}
+			.col-date-w {width:95px;}
+			.col-icon-btn {width:32px;}
+			.w12p {width:12%; min-width:80px;}
+			.ui-datatable .ui-datatable-odd {background: #EEF2E7 no-repeat;}
+			.btn-action {width:210px;height:32px;}
+			.min-width-add-box{min-width:35em;}
+			.color-reject {color:#F00;}
+			.color-accept {color:#28C328;}
+		</style>
+	</ui:define>
+	
+	<ui:define name="headerCenterContent">
+	
+	</ui:define>
+	
+	<ui:define name="content">
+		<h:form id="frmLogStatus">
+			<p:growl id="growlLogStatus"/>
+			<p:panel id="panelSearch" header="Search" styleClass="bottom-shadow">
+				<p:panelGrid id="gridSearch" layout="grid" columns="2" columnClasses="ui-grid-col-6, ui-grid-col-6" styleClass="grid-borderless">
+					<p:panelGrid layout="grid" columns="2" columnClasses="ui-grid-col-5 padding-l0, ui-grid-col-7 padding-l0" styleClass="grid-borderless">
+						<h:outputText value="Cycle Date From" />
+						<p:selectOneMenu id="cycleFrom" value="#{logStatusView.selectedDateFrom}" styleClass="w100">
+							<f:selectItems value="#{logStatusView.selectionCycleFrom}"/>
+						</p:selectOneMenu>
+						
+						<h:outputText value="Cycle Date To" />
+						<p:selectOneMenu id="cycleTo" value="#{logStatusView.selectedDateTo}" styleClass="w100">
+							<f:selectItems value="#{logStatusView.selectionCycleTo}"/>
+						</p:selectOneMenu>
+					</p:panelGrid>
+					
+					<p:panelGrid layout="grid" columns="2" columnClasses="ui-grid-col-5 padding-l0, ui-grid-col-7 padding-l0" styleClass="grid-borderless">
+						<h:outputText value="Policy No" />
+						<p:inputText value="#{logStatusView.policyNo}" styleClass="w100"/>
+						
+						<h:outputText value="Citizen ID" />
+						<p:inputText value="#{logStatusView.citizenId}" styleClass="w100"/>
+						
+						<h:outputText value="Insured Name" />
+						<p:inputText value="#{logStatusView.insuredName}" styleClass="w100"/>
+						
+						<h:outputText value="Mobile" />
+						<p:inputText value="#{logStatusView.mobile}" styleClass="w100"/>
+					</p:panelGrid>
+				</p:panelGrid>
+					
+				<hr class="faded"/>
+				<h:panelGroup id="actionPanel">
+					<p:commandButton id="searchBtn" value="Search" 
+						actionListener="#{logStatusView.search}"
+						process="panelSearch" update="@form"
+						icon="fa fa-search fa-fw"
+						onstart="PF('progressDialog').show()"
+						oncomplete="PF('progressDialog').hide()"
+						styleClass="btn-action btn-no-shadow btn-default">
+					</p:commandButton>
+					
+					<p:commandButton id="clearAll" value="Clear" actionListener="#{logStatusView.clear}"
+						icon="fa fa-undo" process="@this" update="@form" styleClass="btn-action btn-no-shadow btn-yellow" >
+						<p:resetInput target="gridSearch"/>
+					</p:commandButton>
+				</h:panelGroup>
+			</p:panel>
+			
+			<p:panel id="panelData" header="Data List" rendered="#{fn:length(logStatusView.logStatusModel) > 0}" styleClass="bottom-shadow" style="margin-top: 0.5em;">
+				<p:dataTable id="dtLogStatus" lazy="true" 
+					value="#{logStatusView.logStatusModel}"
+					var="var"
+					paginator="true"
+					rows="#{logStatusView.dtRowPerPage}"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					paginatorPosition="bottom" 
+					paginatorAlwaysVisible="false"
+					emptyMessage="No Record Found"
+					rowIndexVar="idx"
+					reflow="true" 
+					styleClass="">
+					
+					<p:column headerText="Cycle From" styleClass="txt-center col-date-w">
+						<p:outputLabel value="#{var.cycleFrom}">
+							<f:convertDateTime pattern="dd-MM-yyyy" timeZone="#{logStatusView.timeZone}"/>
+						</p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Cycle To" styleClass="txt-center col-date-w">
+						<p:outputLabel value="#{var.cycleTo}">
+							<f:convertDateTime pattern="dd-MM-yyyy" timeZone="#{logStatusView.timeZone}"/>
+						</p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Pol No" styleClass="txt-center w12p">
+						<p:outputLabel value="#{var.policyNo}"></p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Insured Name">
+						<p:outputLabel value="#{var.insuredName}"></p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Mobile">
+						<p:outputLabel value="#{var.mobile1}"/>
+					</p:column>
+					
+					<p:column headerText="Action">
+						<p:outputLabel value="#{var.action.paramValue}" 
+							styleClass="#{var.action.paramKey eq 'CONFIRMATION_LOG_ACTION_ACCEPT' ? 'color-accept' : var.action.paramKey eq 'CONFIRMATION_LOG_ACTION_DECLINE' ? 'color-reject' : ''}"/>
+					</p:column>
+					
+					<p:column headerText="Reamrk">
+						<p:outputLabel value="#{var.remark}" 
+							styleClass="#{var.action.paramKey eq 'CONFIRMATION_LOG_ACTION_ACCEPT' ? 'color-accept' : var.action.paramKey eq 'CONFIRMATION_LOG_ACTION_DECLINE' ? 'color-reject' : ''}"/>
+					</p:column>
+					
+					<p:column styleClass="txt-center col-icon-btn">
+						<p:commandButton icon="fa fa fa-cog fa-lg" actionListener="#{logStatusView.doModifyLogStatus(var)}" process="@this"></p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+			
+			<ui:remove>
+			<!-- Dialog -->
+			</ui:remove>
+			<p:dialog id="addActionDlg" widgetVar="addActionDlg" 
+				dynamic="true" modal="true" 
+				fitViewport="true"
+				resizable="false" maximizable="false" 
+				closable="false" closeOnEscape="false"
+				styleClass="">
+				
+				<f:facet name="header">
+					<h:outputText value="Add Action Remark" />
+				</f:facet>
+				
+				<p:panelGrid id="gridAddActionDlg" layout="grid" columns="2" columnClasses="ui-grid-col-6, ui-grid-col-6" styleClass="grid-borderless w100 min-width-add-box">
+					<h:panelGrid columns="1" styleClass="w100">
+						<p:outputLabel value="Policy No."/>
+						<p:inputText value="#{logStatusView.modLogStatus.policyNo}" readonly="true" styleClass="w100" style="margin:0"/>
+						
+						<p:outputLabel value="Insured Name"/>
+						<p:inputText value="#{logStatusView.modLogStatus.insuredName}" readonly="true" styleClass="w100" style="margin:0"/>
+						
+						<p:outputLabel value="Mobile #1"/>
+						<p:inputText value="#{logStatusView.modLogStatus.mobile1}" readonly="true" styleClass="w100" style="margin:0"/>
+						
+						<p:outputLabel value="Mobile #2"/>
+						<p:inputText value="#{logStatusView.modLogStatus.mobile2}" readonly="true" styleClass="w100" style="margin:0"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1" styleClass="w100">
+						<p:outputLabel value="Action"/>
+						<p:selectOneMenu value="#{logStatusView.selectedAction}" styleClass="w100" style="margin:0">
+							<f:selectItems value="#{logStatusView.selectionAction}"/>
+						</p:selectOneMenu>
+						
+						<p:outputLabel value="Remark"/>
+						<p:inputTextarea value="#{logStatusView.inRemark}" styleClass="w100" style="margin:0"/>
+					</h:panelGrid>
+					
+				</p:panelGrid>
+				
+				<f:facet name="footer">
+					<h:panelGrid columns="2" styleClass="w100" columnClasses="ui-grid-col-6, ui-grid-col-6">
+						<p:commandButton value="Submit" actionListener="#{logStatusView.submitLog}" process="@this, gridAddActionDlg" onstart="PF('progressDialog').show()" update="@form" oncomplete="PF('progressDialog').hide()" styleClass="btn-green btn-no-shadow w100" style="height:2.5em;"></p:commandButton>
+					
+						<p:commandButton value="Cancel" process="@this" oncomplete="PF('addActionDlg').hide()" update="@form" styleClass="btn-red btn-no-shadow w100" style="height:2.5em;">
+							<p:resetInput target="gridAddActionDlg" />
+						</p:commandButton>
+					</h:panelGrid>
+				</f:facet>
+				
+			</p:dialog>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

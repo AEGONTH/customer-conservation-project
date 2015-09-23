@@ -16,10 +16,7 @@
 			.col-icon-btn-width {width:45px;}
 			.input-width {width:95%;}
 			.dropdown-menu-width-inherit > label {width:95% !important;}
-			.grid-no-border > div {border: 0 !important;}
-			.grid-separate-less > div > div {border: 0 !important;}
-			.grid-row-gap div.ui-grid-row {padding-bottom:0.5em;}
-			.grid-row-gap div.ui-grid-row .ui-panelgrid-cell.grid-label-col.ui-grid-col-6 {margin-top:5px;} 
+			
 			.grid-label-col {width:30%;max-width:14em;float:none;}
 			.grid-input-col {width:70%;float:none;}
 			.btn-action {width:210px;height:32px;}
@@ -67,8 +64,8 @@
 					<h:outputText value="#{msg['table.1.header']}" styleClass=""/>
 				</f:facet>
 				
-				<p:panelGrid id="mainGrid" columns="2" layout="grid" styleClass="grid-no-border">
-					<p:panelGrid columns="2" layout="grid" columnClasses="grid-label-col, grid-input-col" styleClass="grid-no-border grid-separate-less grid-row-gap">
+				<p:panelGrid id="mainGrid" columns="2" layout="grid" styleClass="grid-borderless">
+					<p:panelGrid columns="2" layout="grid" columnClasses="grid-label-col, grid-input-col" styleClass="grid-borderless grid-row-gap">
 						<p:outputLabel value="Citizen ID" styleClass=""/>
 						<p:inputText id="insuredCitizenId" value="#{cus.citizenId}" styleClass="width-full" readonly="true"/>
 						
@@ -79,7 +76,7 @@
 						<p:inputText id="insuredGender" value="#{cus.gender}" styleClass="width-full" readonly="true"/>
 					</p:panelGrid>
 					
-					<p:panelGrid columns="2" layout="grid" columnClasses="grid-label-col, grid-input-col" styleClass="grid-no-border grid-separate-less grid-row-gap">
+					<p:panelGrid columns="2" layout="grid" columnClasses="grid-label-col, grid-input-col" styleClass="grid-borderless grid-row-gap">
 						<h:outputText value="Date of Birth" styleClass=""/>
 						<p:inputText id="inusredDOB" value="#{cus.dob}" styleClass="width-full" readonly="true">
 							<f:convertDateTime pattern="dd/MM/yyyy" timeZone=""/>
