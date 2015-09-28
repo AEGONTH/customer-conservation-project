@@ -80,7 +80,7 @@ public class FileDownloadView extends BaseBean {
 	}
 	
 	public void doDownload() {
-		if(StringUtils.isBlank(selectedDateFrom) || StringUtils.isBlank(selectedDateFrom)) {
+		if(StringUtils.isBlank(selectedDateFrom) || StringUtils.isBlank(selectedDateTo)) {
 			MessageUtils.getInstance().addErrorMessage("msgDialogDL", "Please select date");
 			return;
 		}
