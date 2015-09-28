@@ -129,13 +129,18 @@ public class FileUploadView extends BaseBean {
 				throw new Exception("File period is not found.");
 			}
 			
-			List<DataHolder> dataList = sheetHolder.getDataList("dataList");
-			for(DataHolder data : dataList) {
-				saveData(data, periodDates.get(0), periodDates.get(1));
-				count++;
+//			/* Check is these period already uploaded */
+			if(validatePeriodData(DateUtil.convStringToDate("dd-MMM-yyyy", periodDates.get(0)), DateUtil.convStringToDate("dd-MMM-yyyy", periodDates.get(1)))) {
+				List<DataHolder> dataList = sheetHolder.getDataList("dataList");
+				for(DataHolder data : dataList) {
+					saveData(data, periodDates.get(0), periodDates.get(1));
+					count++;
+				}
+				
+				MessageUtils.getInstance().addInfoMessage("msgUpload", "" + count + " records have been uploaded.");
+			} else {
+				MessageUtils.getInstance().addWarnMessage("msgUpload", "These datas already uploaded");
 			}
-			
-			MessageUtils.getInstance().addInfoMessage("msgUpload", "" + count + " records have been uploaded.");
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -143,6 +148,17 @@ public class FileUploadView extends BaseBean {
 			try { fileFormatStream.close();} catch(Exception e) {}
 			try { wbStream.close();} catch(Exception e) {}
 		}
+	}
+	
+	private boolean validatePeriodData(Date cycleFrom, Date cycleTo) throws Exception {
+		DetachedCriteria criteria = DetachedCriteria.forClass(ConfirmationRecord.class);
+		criteria.add(Restrictions.eq("cycleFrom", cycleFrom));
+		criteria.add(Restrictions.eq("cycleTo", cycleTo));
+		List<?> list = confirmationRecordService.findByCriteria(criteria);
+		if(list.isEmpty()) {
+			return true;
+		}
+		return false;
 	}
 	
 	private Workbook xlsDecryptor(InputStream workbookStream) throws IOException {
@@ -243,16 +259,18 @@ public class FileUploadView extends BaseBean {
 		
 		if(confirmationList.isEmpty()) {
 			cmr = confirmationRecordService.add(cmr, userLogin);
-		} else {
-			if(confirmationList.size() == 1) {
-				cmr.setId(confirmationList.get(0).getId());
-				cmr.setCreateBy(confirmationList.get(0).getCreateBy());
-				cmr.setCreateDate(confirmationList.get(0).getCreateDate());
-				cmr = confirmationRecordService.update(cmr, userLogin);
-			} else {
-				throw new Exception("Found confirmation record for policy: '" + policyNo + "' more than 1");
-			}
-		}
+		} 
+//		/* Must not re-upload able */
+//		else {
+//			if(confirmationList.size() == 1) {
+//				cmr.setId(confirmationList.get(0).getId());
+//				cmr.setCreateBy(confirmationList.get(0).getCreateBy());
+//				cmr.setCreateDate(confirmationList.get(0).getCreateDate());
+//				cmr = confirmationRecordService.update(cmr, userLogin);
+//			} else {
+//				throw new Exception("Found confirmation record for policy: '" + policyNo + "' more than 1");
+//			}
+//		}
 		return cmr;
 	}
 	
