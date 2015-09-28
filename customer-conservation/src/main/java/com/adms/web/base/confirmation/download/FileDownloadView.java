@@ -79,6 +79,11 @@ public class FileDownloadView extends BaseBean {
 		}
 	}
 	
+	public void reset() {
+		selectedDateFrom = null;
+		selectedDateTo = null;
+	}
+	
 	public void doDownload() {
 		if(StringUtils.isBlank(selectedDateFrom) || StringUtils.isBlank(selectedDateTo)) {
 			MessageUtils.getInstance().addErrorMessage("msgDialogDL", "Please select date");

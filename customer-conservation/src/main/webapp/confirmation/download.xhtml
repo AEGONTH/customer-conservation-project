@@ -42,7 +42,7 @@
 							styleClass="btn-green btn-no-shadow w100"
 							style="height:2.5em;"/>
 						
-						<p:commandButton value="Cancel" process="@this" oncomplete="PF('downloadDlg').hide()" update="@form" styleClass="btn-red btn-no-shadow w100" style="height:2.5em;">
+						<p:commandButton value="Cancel" process="@this" actionListener="#{fileDownloadView.reset}" oncomplete="PF('downloadDlg').hide()" update="@form" styleClass="btn-red btn-no-shadow w100" style="height:2.5em;">
 							<p:resetInput target="@form" />
 						</p:commandButton>
 					</h:panelGrid>
