@@ -126,7 +126,8 @@ public class FileUploadView extends BaseBean {
 			List<String> periodDates = getDateFromString(periodTxt);
 			
 			if(periodDates.isEmpty()) {
-				throw new Exception("File period is not found.");
+				MessageUtils.getInstance().addWarnMessage("msgUpload", "Period date not found on sheet");
+				return;
 			}
 			
 //			/* Check is these period already uploaded */
