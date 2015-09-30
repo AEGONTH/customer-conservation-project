@@ -1,8 +1,15 @@
 package com.adms.web.bean.login;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIInput;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.adms.util.MessageUtils;
 import com.adms.web.base.bean.BaseBean;
 
 @ManagedBean
@@ -11,26 +18,39 @@ public class LoginView extends BaseBean {
 
 	private static final long serialVersionUID = -7276944451892430995L;
 
-	private String username;
+	@ManagedProperty(value="#{loginSession}")
+	private LoginSession loginSession;
 	
-//	reg = ^(?=.*\d).{4,8}$
+	private String username;
 	private String password;
 	
-//	private final PropertyConfig cfg = PropertyConfig.getInstance();
-	
 	public String doLogin() {
-		boolean flag = false;
-		try {
-			flag = true;
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		if(flag) {
-			return "page/helloworld?faces-redirect=true";
+		if(authService()) {
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			ec.getSession(true);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", this.username);
+			
+			loginSession.username(username);
+			
+			return "main?faces-redirect=true";
 		} else {
 			return null;
 		}
+	}
+	
+	private boolean authService() {
+		boolean flag = false;
+		
+		if(!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
+			//TODO: query
+			flag = true;
+		} else {
+			if(StringUtils.isBlank(username)) ((UIInput) FacesContext.getCurrentInstance().getViewRoot().findComponent("frmLogin:username")).setValid(false);
+			if(StringUtils.isBlank(password)) ((UIInput) FacesContext.getCurrentInstance().getViewRoot().findComponent("frmLogin:pwd")).setValid(false);
+			MessageUtils.getInstance().addErrorMessage("msgLogin", "Please fill all the required");
+		}
+		
+		return flag;
 	}
 
 	public String getUsername() {
@@ -51,4 +71,9 @@ public class LoginView extends BaseBean {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public void setLoginSession(LoginSession loginSession) {
+		this.loginSession = loginSession;
+	}
+
 }

@@ -6,33 +6,61 @@
 	template="/templates/blankTemplate.xhtml">
 
 	<ui:define name="head">
-		<title>Login</title>
+		<title>Sign In</title>
+		<style>
+			body {margin:0px;font-family: Arial,sans-serif;}
+			.aegon-color {color: rgb(0, 92, 174);}
+			.wrapper {position: relative;min-height: 100%;}
+			.aegon-header {overflow: hidden;}
+			.logo {background-image:url("#{request.contextPath}/resources/image/aegon.png"); background-repeat: no-repeat; margin:20px auto; height:80px; width:200px;}
+			.logo-w {background-size:200px 74px;}
+			.content {overflow: hidden;padding:0 40px;}
+			.content.main {padding-bottom:1.5em;}
+			.banner {text-align:center;}
+			.txt-head {font-size:16px !important;color: #555; margin: 0px 0px 15px;}
+			.panel-login {margin:0 auto; max-width: 28em; border-color: transparent; background-color: #F1F1F1;}
+			.shadow {box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);}
+			.grid-borderless .ui-widget-content.ui-panelgrid-content.ui-grid {background:transparent no-repeat;}
+			.login-txt {text-align:center;margin: 1.5em auto;}
+			.input-wrapper {margin:0 auto; padding:0.5em 5em;}
+			.input-wrapper input.ui-state-default {height:1.5em; width:97%;}
+			.input-wrapper input:not(:first-child) {margin-top:5px;}
+			.btn-sign-in {margin-top:10px;height:2.2em;}
+		</style>
 	</ui:define>
 	
 	<ui:define name="content">
-	<style>
-		.loginBox {width:50%;text-align:0 auto;}
-	</style>
-		<h:form id="frmLogin">
-			<p:panel id="panelLogin" styleClass="loginBox">
-				<h:panelGrid columns="3">
-					<p:outputLabel value="#{globalMsg['common.txt.username']}" for="username"/>
-					<p:inputText id="username" value="#{loginView.username}"  required="true"/>
-					<p:message for="username"/>
-					
-					<p:outputLabel value="#{globalMsg['common.txt.password']}" for="password"/>
-					<p:password id="password" value="#{loginView.password}" required="true"/>
-					<p:message for="password"/>
-					
-				</h:panelGrid>
-				<p:commandButton id="btnSubmit" value="#{globalMsg['common.txt.btn.submit']}" 
-					actionListener="#{loginView.doLogin}" 
-					update="@form"
-					disabled="true">
-				</p:commandButton>
-			</p:panel>
-			<p:commandButton id="skipBtn" value="SKIP Login" action="/pages/cs/customer-enquiry?faces-redirect=true" update="@this" process="@this"/>
-		</h:form>
+		<div class="wrapper">
+			<div class="aegon-header">
+				<div class="logo logo-w"></div>
+			</div>
+			<div class="content">
+				<div class="banner">
+					<h2 class="txt-head">
+						<h:outputText value="Sign in to Customer Conservation"/>
+					</h2>
+				</div>
+			</div>
+			<div class="content main">
+				<div class="panel-login shadow">
+					<h:form id="frmLogin">
+						<div class="input-wrapper">
+							<div class="login-txt">
+								<i class="fa fa-user fa-3x aegon-color"></i>
+							</div>
+							<p:messages id="msgLogin" autoUpdate="false" globalOnly="false" closable="true"/>
+							<p:focus for="@next"/>
+							<p:inputText id="username" placeholder="Username"/>
+							<p:password id="pwd" placeholder="Password"/>
+							
+							<p:commandButton value="Sign in" action="#{loginView.doLogin}" update="@form" styleClass="btn btn-no-shadow btn-primary btn-sign-in w100"/>
+							
+							<div style="margin-bottom:2em;"></div>
+						</div>
+					</h:form>
+				</div>
+			</div>
+		</div>
 	</ui:define>
 
 </ui:composition>
