@@ -1,4 +1,4 @@
-package com.adms.web.base.confirmation.logstatus;
+package com.adms.web.bean.confirmation.logstatus;
 
 import java.util.ArrayList;
 import java.util.Date;

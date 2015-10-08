@@ -1,4 +1,4 @@
-package com.adms.web.base.confirmation;
+package com.adms.web.bean.confirmation;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;

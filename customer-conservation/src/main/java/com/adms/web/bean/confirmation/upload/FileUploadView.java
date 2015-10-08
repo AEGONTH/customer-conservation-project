@@ -1,4 +1,4 @@
-package com.adms.web.base.confirmation.upload;
+package com.adms.web.bean.confirmation.upload;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

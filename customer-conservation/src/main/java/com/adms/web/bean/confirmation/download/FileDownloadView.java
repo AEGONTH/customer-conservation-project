@@ -1,4 +1,4 @@
-package com.adms.web.base.confirmation.download;
+package com.adms.web.bean.confirmation.download;
 
 import java.io.InputStream;
 import java.text.ParseException;
