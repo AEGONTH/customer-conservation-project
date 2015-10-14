@@ -9,9 +9,23 @@
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
 	<error-page>
 		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
-		<location>/login.xhtml</location>
+		<location>/errors/expired.xhtml</location>
+	</error-page>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/errors/500.xhtml</location>
+	</error-page>
+	
+	<error-page>
+    	<exception-type>java.lang.NullPointerException</exception-type>
+    	<location>/errors/500.xhtml</location>
 	</error-page>
 
 	<context-param>

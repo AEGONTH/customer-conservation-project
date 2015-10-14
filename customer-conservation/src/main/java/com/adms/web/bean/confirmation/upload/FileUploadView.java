@@ -39,18 +39,19 @@ import com.adms.util.MessageUtils;
 import com.adms.util.PropertyConfig;
 import com.adms.utils.DateUtil;
 import com.adms.web.base.bean.BaseBean;
+import com.adms.web.bean.login.LoginSession;
 
 @ManagedBean
 @ViewScoped
 public class FileUploadView extends BaseBean {
 
 	private static final long serialVersionUID = 7287640969458666947L;
-	private String userLogin = "System Admin";
-	
 	private final String FILE_FORMAT_PATH = "fileformat/fwd-confirmation-format.xml";
-
 	private final String FILE_DATE_PATTERN = "yyyyMd";
 
+	@ManagedProperty(value="#{loginSession}")
+	private LoginSession loginSession;
+	
 	@ManagedProperty(value="#{confirmationRecordService}")
 	private ConfirmationRecordService confirmationRecordService;
 	
@@ -259,7 +260,7 @@ public class FileUploadView extends BaseBean {
 		List<ConfirmationRecord> confirmationList = confirmationRecordService.findByCriteria(criteria);
 		
 		if(confirmationList.isEmpty()) {
-			cmr = confirmationRecordService.add(cmr, userLogin);
+			cmr = confirmationRecordService.add(cmr, loginSession.getUsername());
 		} 
 //		/* Must not re-upload able */
 //		else {
@@ -303,6 +304,10 @@ public class FileUploadView extends BaseBean {
 
 	public void setNeedPwd(boolean needPwd) {
 		this.needPwd = needPwd;
+	}
+
+	public void setLoginSession(LoginSession loginSession) {
+		this.loginSession = loginSession;
 	}
 	
 }

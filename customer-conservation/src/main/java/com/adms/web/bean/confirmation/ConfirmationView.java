@@ -14,15 +14,15 @@ public class ConfirmationView extends BaseBean {
 	private final String REDIRECT_ADD_LOG = "/confirmation/addlog?faces-redirect=true";
 	private final String REDIRECT_FILE_DOWNLOAD = "/confirmation/download?faces-redirect=true";
 	
-	public String toFileUploadPage() {
+	public String toFileUploadPage() throws Throwable {
 		return REDIRECT_FILE_UPLOAD;
 	}
 	
-	public String toAddLogPage() {
+	public String toAddLogPage() throws Throwable {
 		return REDIRECT_ADD_LOG;
 	}
 	
-	public String toFileDownloadPage() {
+	public String toFileDownloadPage() throws Throwable {
 		return REDIRECT_FILE_DOWNLOAD;
 	}
 }

@@ -42,6 +42,7 @@ import com.adms.util.MessageUtils;
 import com.adms.utils.DateUtil;
 import com.adms.web.base.bean.BaseBean;
 import com.adms.web.base.bean.LanguageBean;
+import com.adms.web.bean.login.LoginSession;
 
 @ManagedBean
 @ViewScoped
@@ -51,6 +52,9 @@ public class CustomerEnquiryView extends BaseBean {
 	
 	@ManagedProperty(value="#{language}")
 	private LanguageBean language;
+	
+	@ManagedProperty(value="#{loginSession}")
+	private LoginSession loginSession;
 	
 	@ManagedProperty(value="#{customerService}")
 	private CustomerService customerService;
@@ -432,9 +436,9 @@ public class CustomerEnquiryView extends BaseBean {
 			example.setCreateBy(selectedCallLog.getCreateBy());
 			example.setCreateDate(selectedCallLog.getCreateDate());
 			
-			return callLogService.update(example, super.DEFAULT_SYSTEM_LOG_NAME);
+			return callLogService.update(example, loginSession.getUsername());
 		} else {
-			return callLogService.add(example, super.DEFAULT_SYSTEM_LOG_NAME);
+			return callLogService.add(example, loginSession.getUsername());
 		}
 	}
 	
@@ -574,6 +578,10 @@ public class CustomerEnquiryView extends BaseBean {
 
 	public void setSelectedCallLog(CallLog selectedCallLog) {
 		this.selectedCallLog = selectedCallLog;
+	}
+	
+	public void setLoginSession(LoginSession loginSession) {
+		this.loginSession = loginSession;
 	}
 
 }

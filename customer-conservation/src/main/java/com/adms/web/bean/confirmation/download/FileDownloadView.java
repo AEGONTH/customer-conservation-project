@@ -69,13 +69,13 @@ public class FileDownloadView extends BaseBean {
 	private StreamedContent file;
 	
 	@PostConstruct
-	private void init() {
+	private void init() throws Throwable {
 		selectedDateFrom = null;
 		selectedDateTo = null;
 		try {
 			prepareDateRange();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 	}
 	
@@ -84,7 +84,7 @@ public class FileDownloadView extends BaseBean {
 		selectedDateTo = null;
 	}
 	
-	public void doDownload() {
+	public void doDownload() throws Throwable {
 		if(StringUtils.isBlank(selectedDateFrom) || StringUtils.isBlank(selectedDateTo)) {
 			MessageUtils.getInstance().addErrorMessage("msgDialogDL", "Please select date");
 			return;
@@ -110,7 +110,6 @@ public class FileDownloadView extends BaseBean {
 					String fileName = EXCEL_NAME_PATTERN + TEMPLATE_EXCEL_CONF_REPORT_PATH.substring(TEMPLATE_EXCEL_CONF_REPORT_PATH.lastIndexOf("."), TEMPLATE_EXCEL_CONF_REPORT_PATH.length());
 					fileName = fileName.replaceAll("#fdd-MMM-yyyy", DateUtil.convDateToString(DISPLAY_DATE_PATTERN, maxCycleFrom));
 					fileName = fileName.replaceAll("#tdd-MMM-yyyy", DateUtil.convDateToString(DISPLAY_DATE_PATTERN, maxCycleTo));
-					System.out.println("File Name: " + fileName);
 					ft.fileDownload(fileName, wb);
 				}
 				

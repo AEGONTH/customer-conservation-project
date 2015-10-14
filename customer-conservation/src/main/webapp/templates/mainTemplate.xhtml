@@ -4,6 +4,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
 	<f:view locale="#{language.localeCode}">
@@ -37,6 +39,13 @@
 				.submenuLanguage .ui-menu {width:10em;}
 				.normal-menu {display:block;}
 				li.ui-separator.ui-state-default.menu-separate {border:none;width:2px;height:22px;clear:none;margin:4px 6px 0;}
+				.lang-btn.ui-button.ui-widget.ui-state-default {border:none;background:none;color:#0079C2;}
+				.lang-btn.ui-button.ui-widget.ui-state-default:hover {color:#06A1FF;}
+				.cmd-head-wrapper div {display:inline; float:right;}
+				.cmd-link.ui-commandlink.ui-widget {display:inline-block; text-decoration: none; font-weight:bold; color:#0079C2;}
+				.cmd-link.ui-commandlink.ui-widget:hover {color:#06A1FF;}
+				.menu-separate i {color:#0079C2;}
+				.menu-separate:parent {background-color:red;}
 			</style>
 			<ui:insert name="head" />
 		</h:head>
@@ -61,16 +70,31 @@
 								<p:column style="width:150px;border:inherit !important;background:inherit;">
 									<p:graphicImage value="/resources/image/aegon.png" styleClass="aegon-head"/>
 								</p:column>
-								<p:column style="text-align:center;border:inherit !important;background:inherit;">
-									
-								</p:column>
 								<p:column style="vertical-align: bottom; text-align: right; width:10em;border:inherit !important;background:inherit;">
-									<div class="lang-div">
-										<p:commandButton id="btnLang" value="Language" type="button" icon="fa fa-language fa-fw" styleClass="" style="border:none;background:none;color:#0079C2;" />
-									    <p:tieredMenu id="tireMenu" overlay="true" trigger="btnLang" my="center top" at="center bottom" 
-									    	model="#{language.languageMenuModel}"
-									    	style="width:10em;" styleClass="menu-language">
-									    </p:tieredMenu>
+									<div class="cmd-head-wrapper">
+										<div class="menu-signout">
+											<p:commandLink action="#{loginSession.signOut}" styleClass="cmd-link">
+												<i class="fa fa-sign-out"/>
+												<p:spacer width="2"/>
+												<h:outputText value="Logout" />
+											</p:commandLink>
+										</div>
+										<ui:remove><!-- Remove for now -->
+										<div class="menu-separate" style="margin: 0px 10px;">
+											<i class="fa fa-minus fa-rotate-90"></i>
+										</div>
+										<div class="lang-div">
+											<p:commandLink id="btnLang" styleClass="cmd-link">
+												<i class="fa fa-language fa-fw"/>
+												<p:spacer width="2"></p:spacer>
+												<h:outputText value="Language"/>
+											</p:commandLink>
+										    <p:tieredMenu id="tireMenu" overlay="true" trigger="btnLang" my="center top" at="center bottom" 
+										    	model="#{language.languageMenuModel}"
+										    	style="width:10em;" styleClass="menu-language">
+										    </p:tieredMenu>
+										</div>
+										</ui:remove>
 									</div>
 								</p:column>
 							</p:row>
@@ -82,13 +106,26 @@
 				</div>
 				<div class="wrapper normal-menu" style="margin-top:-1.2em;margin-bottom:0.5em;">
 					<p:menubar styleClass="bottom-shadow">
-						<p:menuitem value="Main" containerStyleClass="menu-item" icon="fa fa-home fa-lg fa-fw" style="font-weight:bold;" action="/main?faces-redirect=true"/>
-						<p:separator styleClass="menu-separate"/>
-						<p:menuitem id="menuCusEnq" value="Customer Enquiry" containerStyleClass="menu-item" icon="fa fa-search fa-lg fa-fw" action="/cs/customer-enquiry?faces-redirect=true"/>
-						<p:separator styleClass="menu-separate"/>
-						<p:menuitem id="menuConfirm" value="Confirmation Call" containerStyleClass="menu-item" icon="fa fa-phone-square fa-lg fa-fw" action="/confirmation?faces-redirect=true"/>
+						<p:menuitem id="menuMain" 
+							value="Main" containerStyleClass="menu-item" 
+							icon="fa fa-home fa-lg fa-fw" ajax="false" 
+							action="#{navigatorBean.mainMenu}" style="font-weight:bold;"/>
 						
-						<ui:remove><!-- language selection -->
+						<p:separator styleClass="menu-separate" rendered="#{loginSession.privCusEnq()}"/>
+						<p:menuitem id="menuCusEnq" 
+							value="Customer Enquiry" containerStyleClass="menu-item" 
+							icon="fa fa-search fa-lg fa-fw" ajax="false" 
+							action="#{navigatorBean.customerEnquiryMenu}"
+							rendered="#{loginSession.privCusEnq()}"/>
+						
+						<p:separator styleClass="menu-separate" rendered="#{loginSession.privConfCall()}"/>
+						<p:menuitem id="menuConfirm" 
+							value="Confirmation Call" containerStyleClass="menu-item" 
+							icon="fa fa-phone-square fa-lg fa-fw" ajax="false" 
+							action="#{navigatorBean.confirmationMenu}"
+							rendered="#{loginSession.privConfCall()}"/>
+						
+						<ui:remove><!-- Disabled language selection on bar -->
 						<f:facet name="options">
 							<div class="lang-div">
 								<p:commandButton id="btnLang2" value="Language" type="button" icon="fa fa-language fa-fw" styleClass="" style="border:none;background:none;color:#0079C2;" />
@@ -110,13 +147,14 @@
 				<ui:include src="/rights-reserved.xhtml"/>
 			</div>
 			
+			<p:ajaxExceptionHandler type="javax.faces.application.ViewExpiredException" onexception="PF('cmd-expired').click()" />
+			
 			<p:dialog widgetVar="progressDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" style="max-width:500px;">
 				<h:panelGrid columns="2">
 					<i class="fa fa-cog fa-spin fa-4x" style="margin-right: 12px; vertical-align: middle;"></i>
 					<h:outputText value="Please wait..." style="white-space: nowrap;"/>
 				</h:panelGrid>
 			</p:dialog>
-			
 			<script type="text/javascript">
 			    function ScrollPage(location) {
 			        window.location.hash=location;

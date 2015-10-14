@@ -26,6 +26,7 @@
 			.input-wrapper input.ui-state-default {height:1.5em; width:97%;}
 			.input-wrapper input:not(:first-child) {margin-top:5px;}
 			.btn-sign-in {margin-top:10px;height:2.2em;}
+			.ui-messages-error .ui-messages-error-summary {font-size: 11px;}
 		</style>
 	</ui:define>
 	
@@ -50,11 +51,10 @@
 							</div>
 							<p:messages id="msgLogin" autoUpdate="false" globalOnly="false" closable="true"/>
 							<p:focus for="@next"/>
-							<p:inputText id="username" placeholder="Username"/>
-							<p:password id="pwd" placeholder="Password"/>
+							<p:inputText id="username" placeholder="Username" value="#{loginView.username}"/>
+							<p:password id="pwd" placeholder="Password" value="#{loginView.password}"/>
 							
 							<p:commandButton value="Sign in" action="#{loginView.doLogin}" update="@form" styleClass="btn btn-no-shadow btn-primary btn-sign-in w100"/>
-							
 							<div style="margin-bottom:2em;"></div>
 						</div>
 					</h:form>

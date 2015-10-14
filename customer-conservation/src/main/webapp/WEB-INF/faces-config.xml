@@ -26,12 +26,6 @@
 	<factory>
 		<render-kit-factory>org.omnifaces.renderkit.Html5RenderKitFactory</render-kit-factory>
 	</factory>
-	
-	<managed-bean>
-		<managed-bean-name>currentDate</managed-bean-name>
-		<managed-bean-class>java.util.Date</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>utilize</managed-bean-name>

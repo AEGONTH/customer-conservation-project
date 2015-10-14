@@ -3,6 +3,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
 	template="/templates/mainTemplate.xhtml">
 
 	<ui:define name="head">
@@ -10,16 +12,23 @@
 		<title>Customer Conservation</title>
 		
 		<style>
+			
 		</style>
 	</ui:define>
 	
 	<ui:define name="content">
 		<h:form id="frmMain">
-			<p:panel>
+			<p:panel styleClass="bottom-shadow" style="margin-bottom:0.5em;">
 				<f:facet name="header">
 					<h:outputText value="Hello"/>	
 				</f:facet>
-					<h:outputText value="Main Page" />
+				<h:outputText value="Welcome to Customer Conservation Platform." />
+				
+				<ui:remove>
+				<p:commandLink value="Go to System Admin Page" 
+					action="protected/admin?faces-redirect=true" 
+					ajax="false" rendered="#{loginSession.privAdmin()}"/>
+				</ui:remove>
 			</p:panel>
 		</h:form>
 	</ui:define>

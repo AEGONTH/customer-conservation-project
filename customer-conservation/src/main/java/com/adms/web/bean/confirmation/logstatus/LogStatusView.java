@@ -27,6 +27,7 @@ import com.adms.util.MessageUtils;
 import com.adms.utils.DateUtil;
 import com.adms.web.base.bean.BaseBean;
 import com.adms.web.base.bean.ParamConfigBean;
+import com.adms.web.bean.login.LoginSession;
 
 @ManagedBean
 @ViewScoped
@@ -34,7 +35,8 @@ public class LogStatusView extends BaseBean {
 
 	private static final long serialVersionUID = -6886291977758237407L;
 
-	private final String USER_LOGIN = "System Admin";
+	@ManagedProperty(value="#{loginSession}")
+	private LoginSession loginSession;
 	
 	@ManagedProperty(value="#{confirmationRecordService}")
 	private ConfirmationRecordService confirmationRecordService;
@@ -163,7 +165,7 @@ public class LogStatusView extends BaseBean {
 				modLogStatus.setAction(paramConfigBean.getParamConfigFromParamKey(selectedAction));
 			}
 			modLogStatus.setRemark(inRemark);
-			confirmationRecordService.update(modLogStatus, USER_LOGIN);
+			confirmationRecordService.update(modLogStatus, loginSession.getUsername());
 
 			search();
 			selectedAction = null;
@@ -358,6 +360,10 @@ public class LogStatusView extends BaseBean {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public void setLoginSession(LoginSession loginSession) {
+		this.loginSession = loginSession;
 	}
 	
 }
