@@ -308,7 +308,6 @@ public class CustomerEnquiryView extends BaseBean {
     }
 	
 	public void doAddCallLog() throws Exception {
-		//TODO validate input
 		if(model == null) throw new Exception("ERROR, please refresh page");
 		RequestContext rc = RequestContext.getCurrentInstance();
 		

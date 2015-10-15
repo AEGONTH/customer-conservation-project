@@ -5,7 +5,7 @@ import javax.faces.context.FacesContext;
 
 public class MessageUtils {
 
-	public static MessageUtils instance;
+	private static MessageUtils instance;
 	
 	public MessageUtils() {
 		

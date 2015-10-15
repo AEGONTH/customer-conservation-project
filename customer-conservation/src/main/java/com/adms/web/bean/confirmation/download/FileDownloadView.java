@@ -132,7 +132,7 @@ public class FileDownloadView extends BaseBean {
 			wb = WorkbookFactory.create(templateExcelConf);
 			
 			Sheet tempSheet = wb.getSheetAt(0);
-			Sheet nSheet = null;
+			Sheet newSheet = null;
 			
 //			Excel Processing below here
 			for(ConfirmationRecord conf : dataList) {
@@ -141,12 +141,12 @@ public class FileDownloadView extends BaseBean {
 				
 				if(currentCycle == null || currentCycle.compareTo(conf.getCycleFrom()) != 0) {
 					currentCycle = conf.getCycleFrom();
-					nSheet = wb.createSheet(getSheetName(conf.getCycleFrom(), conf.getCycleTo()));
-					headerProcess(tempSheet, nSheet, conf.getCycleFrom(), conf.getCycleTo());
+					newSheet = wb.createSheet(getSheetName(conf.getCycleFrom(), conf.getCycleTo()));
+					headerProcess(tempSheet, newSheet, conf.getCycleFrom(), conf.getCycleTo());
 					contentRow = 5;
 				}
 				
-				contentProcess(tempSheet, nSheet, contentRow, conf);
+				contentProcess(tempSheet, newSheet, contentRow, conf);
 				contentRow++;
 			}
 			return wb;
@@ -156,52 +156,52 @@ public class FileDownloadView extends BaseBean {
 		return null;
 	}
 	
-	private void headerProcess(Sheet tSheet, Sheet nSheet, Date cycleFrom, Date cycleTo) throws Exception {
-		Cell tCell = tSheet.getRow(0).getCell(0, Row.CREATE_NULL_AS_BLANK);
-		Cell nCell = nSheet.createRow(0).createCell(0, tCell.getCellType());
+	private void headerProcess(Sheet tempSheet, Sheet newSheet, Date cycleFrom, Date cycleTo) throws Exception {
+		Cell tCell = tempSheet.getRow(0).getCell(0, Row.CREATE_NULL_AS_BLANK);
+		Cell nCell = newSheet.createRow(0).createCell(0, tCell.getCellType());
 		nCell.setCellValue(tCell.getStringCellValue().replaceAll(PARAM_COMPANY, FWD_COMP_NAME));
 		nCell.setCellStyle(tCell.getCellStyle());
 		
-		tCell = tSheet.getRow(1).getCell(0, Row.CREATE_NULL_AS_BLANK);
-		nCell = nSheet.createRow(1).createCell(0, tCell.getCellType());
+		tCell = tempSheet.getRow(1).getCell(0, Row.CREATE_NULL_AS_BLANK);
+		nCell = newSheet.createRow(1).createCell(0, tCell.getCellType());
 		nCell.setCellValue(tCell.getStringCellValue().replaceAll(PARAM_ABBR_NAME, "ADAMS-TVD")
 				.replaceAll(PARAM_CYCLE_FROM, DateUtil.convDateToString(DISPLAY_DATE_PATTERN, cycleFrom))
 				.replaceAll(PARAM_CYCLE_TO, DateUtil.convDateToString(DISPLAY_DATE_PATTERN, cycleTo)));
 		nCell.setCellStyle(tCell.getCellStyle());
 		
-		Row tRow = tSheet.getRow(4);
-		Row nRow = nSheet.createRow(4);
+		Row tempRow = tempSheet.getRow(4);
+		Row newRow = newSheet.createRow(4);
 		
-		for(int c = 0; c < tRow.getLastCellNum(); c++) {
-			tCell = tRow.getCell(c, Row.CREATE_NULL_AS_BLANK);
-			nCell = nRow.createCell(c, tCell.getCellType());
+		for(int c = 0; c < tempRow.getLastCellNum(); c++) {
+			tCell = tempRow.getCell(c, Row.CREATE_NULL_AS_BLANK);
+			nCell = newRow.createCell(c, tCell.getCellType());
 			nCell.setCellValue(tCell.getStringCellValue());
 			nCell.setCellStyle(tCell.getCellStyle());
 		}
 		
-		for(int i = 0; i < tSheet.getNumMergedRegions(); i++) {
-			CellRangeAddress mergedRegion = tSheet.getMergedRegion(i);
-			nSheet.addMergedRegion(mergedRegion);
+		for(int i = 0; i < tempSheet.getNumMergedRegions(); i++) {
+			CellRangeAddress mergedRegion = tempSheet.getMergedRegion(i);
+			newSheet.addMergedRegion(mergedRegion);
 		}
 	}
 	
-	private void contentProcess(Sheet tSheet, Sheet nSheet, int contentRow, ConfirmationRecord data) throws Exception {
-		int tempRow = -1;
+	private void contentProcess(Sheet tempSheet, Sheet newSheet, int contentRow, ConfirmationRecord data) throws Exception {
+		int tempRowNum = -1;
 		if(data.getAction() == null) {
-			tempRow = 7;
+			tempRowNum = 7;
 		} else if(data.getAction().getParamKey().equals("CONFIRMATION_LOG_ACTION_ACCEPT")) {
-			tempRow = 5;
+			tempRowNum = 5;
  		} else {
- 			tempRow = 6;
+ 			tempRowNum = 6;
  		}
-		Row tRow = tSheet.getRow(tempRow);
-		Row row = nSheet.createRow(contentRow);
-		for(int c = 0; c < tRow.getLastCellNum(); c++) {
-			Cell tCell = tRow.getCell(c);
-			Cell cell = row.createCell(c, tCell.getCellType());
+		Row tempRow = tempSheet.getRow(tempRowNum);
+		Row newRow = newSheet.createRow(contentRow);
+		for(int c = 0; c < tempRow.getLastCellNum(); c++) {
+			Cell tCell = tempRow.getCell(c);
+			Cell cell = newRow.createCell(c, tCell.getCellType());
 			setValue(cell, data);
 			cell.setCellStyle(tCell.getCellStyle());
-			cell.getRow().getSheet().setColumnWidth(c, tRow.getSheet().getColumnWidth(c));
+			cell.getRow().getSheet().setColumnWidth(c, tempRow.getSheet().getColumnWidth(c));
 		}
 		
 	}

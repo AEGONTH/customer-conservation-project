@@ -61,7 +61,6 @@ public class LoginView extends BaseBean {
 		boolean flag = false;
 		
 		if(!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
-			//TODO: Authentication
 			try {
 				String salt = "$AlT*P@$$w0Rd#";
 				String encryptedPwd = EncryptionUtil.getInstance().md5(password, salt);
