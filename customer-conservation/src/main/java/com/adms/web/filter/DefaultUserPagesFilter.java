@@ -12,13 +12,11 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.adms.web.bean.login.LoginSession;
 
-@WebFilter(filterName="DefaultUserPagesFilter", urlPatterns={"/confirmation", "/confirmation/*", "/cs/*"})
 public class DefaultUserPagesFilter extends AbstractFilter {
 
 	private static Map<String, String> mapURIPrivs;
@@ -34,6 +32,7 @@ public class DefaultUserPagesFilter extends AbstractFilter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		System.out.println("DefaultUser");
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpSession session = req.getSession(true);
 		if(session == null || session.getAttribute("loginSession") == null) {

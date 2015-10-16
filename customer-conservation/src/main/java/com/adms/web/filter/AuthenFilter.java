@@ -10,11 +10,13 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName="AuthenFilter", urlPatterns="/*")
+import org.apache.commons.lang3.StringUtils;
+
+import com.adms.web.bean.login.LoginSession;
+
 public class AuthenFilter extends AbstractFilter {
 
 	private static List<String> allowedURIs;
@@ -34,16 +36,24 @@ public class AuthenFilter extends AbstractFilter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		System.out.println("Authen Filter");
 		HttpServletRequest req = (HttpServletRequest) request;
-		HttpSession session = req.getSession(false);
+		HttpSession session = req.getSession();
 		String reqURI = req.getRequestURI();
 		
-		if(!allowedURIs.stream().filter(p -> reqURI.contains(p)).collect(Collectors.toList()).isEmpty()
-				|| (session != null && session.getAttribute("loginSession") != null)) {
-			chain.doFilter(request, response);
-		} else {
+		if(session.isNew()) {
 			doLogin(request, response, req);
+			return;
 		}
+		
+		LoginSession loginSession = (LoginSession) session.getAttribute("loginSession");
+		if((loginSession == null 
+				|| (loginSession != null && StringUtils.isEmpty(loginSession.getUsername())))
+				&& allowedURIs.stream().filter(p -> reqURI.contains(p)).collect(Collectors.toList()).isEmpty()) {
+			doLogin(request, response, req);
+			return;
+		}
+		chain.doFilter(request, response);
 	}
 	
 	@Override
