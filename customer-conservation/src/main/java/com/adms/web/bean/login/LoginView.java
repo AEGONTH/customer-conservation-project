@@ -92,7 +92,7 @@ public class LoginView extends BaseBean {
 													.sorted((p1, p2) -> p1.compareTo(p2))
 													.distinct()
 													.collect(Collectors.toList());
-						loginSession.roles(userLogin.getRolePrivileges().keySet())
+						loginSession.username(userLogin.getUsername()).roles(userLogin.getRolePrivileges().keySet())
 									.rolePrivileges(userLogin.getRolePrivileges())
 									.distinctPrivileges(distinctPrivs);
 					}

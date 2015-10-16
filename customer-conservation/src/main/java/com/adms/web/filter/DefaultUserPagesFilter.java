@@ -32,7 +32,6 @@ public class DefaultUserPagesFilter extends AbstractFilter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		System.out.println("DefaultUser");
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpSession session = req.getSession(true);
 		if(session == null || session.getAttribute("loginSession") == null) {
