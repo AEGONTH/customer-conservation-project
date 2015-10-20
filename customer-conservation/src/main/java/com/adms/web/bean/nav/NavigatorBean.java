@@ -7,7 +7,7 @@ import javax.faces.bean.RequestScoped;
 @RequestScoped
 public class NavigatorBean {
 	
-	private final String REDIRECT_PARAM = "?faces-rediret=true";
+	private final String REDIRECT_PARAM = "?faces-redirect=true";
 	
 	//Main Page URL
 	private final String TO_MAIN_PAGE = "/main";
