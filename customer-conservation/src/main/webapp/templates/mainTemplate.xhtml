@@ -19,6 +19,9 @@
 				<link rel="shortcut icon" href="#{request.contextPath}/resources/image/ico/favicon.ico" type="image/x-icon" />
 				<link rel="icon" href="#{request.contextPath}/resources/image/ico/favicon.ico" type="image/x-icon"/>
 			</f:facet>
+			<h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+			<h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head" />
+			<h:outputScript target="head">$ = jQuery;</h:outputScript>
 			<h:outputStylesheet library="css" name="custom-aegon.css" />
 			
 			<style type="text/css">
@@ -46,6 +49,8 @@
 				.cmd-link.ui-commandlink.ui-widget:hover {color:#06A1FF;}
 				.menu-separate i {color:#0079C2;}
 				.menu-separate:parent {background-color:red;}
+				/* fix icon menu */
+				.ui-menuitem-icon.ui-icon.fa.fa-lg.fa-fw {height:18px;line-height: 1em;}
 			</style>
 			<ui:insert name="head" />
 		</h:head>
@@ -124,6 +129,13 @@
 							icon="fa fa-phone-square fa-lg fa-fw" ajax="false" 
 							action="#{navigatorBean.confirmationMenu}"
 							rendered="#{loginSession.privConfCall()}"/>
+						
+						<p:separator styleClass="menu-separate" rendered="#{loginSession.privOmniCh()}"/>
+						<p:menuitem id="menuOmniCH" 
+							value="Omni CH." containerStyleClass="menu-item" 
+							icon="fa fa-phone-square fa-lg fa-fw" ajax="false" 
+							action="#{navigatorBean.toOmniChMainPage}"
+							rendered="#{loginSession.privOmniCh()}"/>
 						
 						<ui:remove><!-- Disabled language selection on bar -->
 						<f:facet name="options">

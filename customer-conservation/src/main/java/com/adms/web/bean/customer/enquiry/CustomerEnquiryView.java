@@ -414,16 +414,17 @@ public class CustomerEnquiryView extends BaseBean {
 		example.setCallLogDetail(logDetailCategoryService.findByCriteria(logDetailCriteria).get(0));
 		if(!StringUtils.isBlank(detail)) example.setDetail(detail);
 		
-		LogStatusGroup lsgComplaint = logStatusGroupService.find(complaintStatus);
-		example.setLogCurrentStatus(lsgComplaint);
-		if(lsgComplaint.getParam().equals("COMPLAINT_STATUS_CLOSE_CANNOT_CONTACT") 
-				|| lsgComplaint.getParam().equals("COMPLAINT_STATUS_CLOSE_CAN_CONTACT_CUSTOMER")) {
-			example.setClosedDate(DateUtil.getCurrentDate());
-		} else {
-			example.setClosedDate(null);
+		if(complaintStatus > 0) {
+			LogStatusGroup lsgComplaint = logStatusGroupService.find(complaintStatus);
+			example.setLogCurrentStatus(lsgComplaint);
+			if(lsgComplaint.getParam().equals("COMPLAINT_STATUS_CLOSE_CANNOT_CONTACT") 
+					|| lsgComplaint.getParam().equals("COMPLAINT_STATUS_CLOSE_CAN_CONTACT_CUSTOMER")) {
+				example.setClosedDate(DateUtil.getCurrentDate());
+			} else {
+				example.setClosedDate(null);
+			}
 		}
-		
-		example.setLogResult(logStatusGroupService.find(complaintResult));
+		if(complaintResult > 0) example.setLogResult(logStatusGroupService.find(complaintResult));
 		example.setLogResultDetail(resultDetail);
 		example.setCorrectiveAction(correctiveAction);
 		example.setSuggestDetail(suggestDetail);

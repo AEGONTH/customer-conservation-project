@@ -6,8 +6,8 @@ import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
+
+import org.omnifaces.util.Faces;
 
 import com.adms.web.base.bean.BaseBean;
 
@@ -27,26 +27,40 @@ public class LoginSession extends BaseBean {
 	}
 
 	public void signOut() throws Exception {
-		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 		invalidateSession();
-		ec.redirect(ec.getRequestContextPath() + "/login");
+		Faces.redirect(Faces.getRequestContextPath() + "/login");
 	}
 	
 	public void invalidateSession() throws Exception {
-		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-		ec.invalidateSession();
+		Faces.invalidateSession();
+	}
+	
+	public boolean privSysAdmin() throws Throwable {
+		return distinctPrivileges != null && distinctPrivileges.contains("SYSTEM_ADMIN");
 	}
 	
 	public boolean privAdmin() throws Throwable {
-		return distinctPrivileges != null && distinctPrivileges.contains("CS_ADMIN");
+		return distinctPrivileges != null 
+				&& (distinctPrivileges.contains("CS_ADMIN")
+						|| distinctPrivileges.contains("SYSTEM_ADMIN"));
 	}
 	
 	public boolean privCusEnq() throws Throwable {
-		return distinctPrivileges != null && distinctPrivileges.contains("CUSTOMER_ENQUIRY");
+		return distinctPrivileges != null 
+				&& (distinctPrivileges.contains("CUSTOMER_ENQUIRY")
+						|| distinctPrivileges.contains("SYSTEM_ADMIN"));
 	}
 	
 	public boolean privConfCall() throws Throwable {
-		return distinctPrivileges != null && distinctPrivileges.contains("CONFIRMATION_CALL");
+		return distinctPrivileges != null 
+				&& (distinctPrivileges.contains("CONFIRMATION_CALL")
+						|| distinctPrivileges.contains("SYSTEM_ADMIN"));
+	}
+	
+	public boolean privOmniCh() throws Throwable {
+		return distinctPrivileges != null 
+				&& (distinctPrivileges.contains("OMNI_CHANNEL_SALES")
+						|| distinctPrivileges.contains("SYSTEM_ADMIN"));
 	}
 	
 	public void checkPermissions() throws Throwable {

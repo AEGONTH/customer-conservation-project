@@ -38,12 +38,12 @@
 				<p:panelGrid id="gridSearch" layout="grid" columns="2" columnClasses="ui-grid-col-6, ui-grid-col-6" styleClass="grid-borderless">
 					<p:panelGrid layout="grid" columns="2" columnClasses="ui-grid-col-5 padding-l0, ui-grid-col-7 padding-l0" styleClass="grid-borderless">
 						<h:outputText value="Cycle Date From" />
-						<p:selectOneMenu id="cycleFrom" value="#{logStatusView.selectedDateFrom}" styleClass="w100">
+						<p:selectOneMenu id="cycleFrom" value="#{logStatusView.selectedDateFrom}" styleClass="">
 							<f:selectItems value="#{logStatusView.selectionCycleFrom}"/>
 						</p:selectOneMenu>
 						
 						<h:outputText value="Cycle Date To" />
-						<p:selectOneMenu id="cycleTo" value="#{logStatusView.selectedDateTo}" styleClass="w100">
+						<p:selectOneMenu id="cycleTo" value="#{logStatusView.selectedDateTo}" styleClass="">
 							<f:selectItems value="#{logStatusView.selectionCycleTo}"/>
 						</p:selectOneMenu>
 					</p:panelGrid>
@@ -130,7 +130,7 @@
 					</p:column>
 					
 					<p:column styleClass="txt-center col-icon-btn">
-						<p:commandButton icon="fa fa fa-cog fa-lg" actionListener="#{logStatusView.doModifyLogStatus(var)}" process="@this"></p:commandButton>
+						<p:commandButton icon="fa fa fa-cog" actionListener="#{logStatusView.doModifyLogStatus(var)}" process="@this"></p:commandButton>
 					</p:column>
 				</p:dataTable>
 			</p:panel>
@@ -166,7 +166,7 @@
 					
 					<h:panelGrid columns="1" styleClass="w100">
 						<p:outputLabel value="Action"/>
-						<p:selectOneMenu value="#{logStatusView.selectedAction}" styleClass="w100" style="margin:0">
+						<p:selectOneMenu value="#{logStatusView.selectedAction}" styleClass="" style="margin:0">
 							<f:selectItems value="#{logStatusView.selectionAction}"/>
 						</p:selectOneMenu>
 						

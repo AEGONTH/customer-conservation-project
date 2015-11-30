@@ -9,16 +9,18 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
+import org.omnifaces.util.Components;
+import org.omnifaces.util.Faces;
+import org.omnifaces.util.Messages;
 
 import com.adms.common.entity.UserLogin;
-import com.adms.util.MessageUtils;
 import com.adms.utils.EncryptionUtil;
 import com.adms.web.base.bean.BaseBean;
+import com.adms.web.bean.nav.NavigatorBean;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -28,7 +30,7 @@ public class LoginView extends BaseBean {
 
 	private static final long serialVersionUID = -7276944451892430995L;
 
-	private final String AUTH_URL = "http://127.0.0.1:8080/authen-ws/rest/authservice";
+	private final String AUTH_URL = "http://10.66.0.16:8080/authen-ws/rest/authservice";
 	private final String AUTH_PATH = "auth";
 	
 	@ManagedProperty(value="#{loginSession}")
@@ -37,22 +39,33 @@ public class LoginView extends BaseBean {
 	private String username;
 	private String password;
 	
+	private String newPassword;
+	private String confirmPassword;
+	
 	@PostConstruct
 	private void init() throws Throwable {
 		
 	}
 	
-	public String doLogin() {
+	public String doLogin() throws Throwable {
 		if(!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
 			if(authService()) {
+				NavigatorBean nav = Faces.evaluateExpressionGet("#{navigatorBean}");
+				
+				if(!loginSession.privSysAdmin()) {
+					if(loginSession.privOmniCh()) {
+						return nav.toOmniChMainPage();
+					}
+				}
+				
 				return "main?faces-redirect=true";
 			} else {
-				MessageUtils.getInstance().addErrorMessage("msgLogin", "Invalid Username or Password.");
+				Messages.addError("msgLogin", "Invalid Username or Password.");
 			}
 		} else {
-			if(StringUtils.isBlank(username)) ((UIInput) FacesContext.getCurrentInstance().getViewRoot().findComponent("frmLogin:username")).setValid(false);
-			if(StringUtils.isBlank(password)) ((UIInput) FacesContext.getCurrentInstance().getViewRoot().findComponent("frmLogin:pwd")).setValid(false);
-			MessageUtils.getInstance().addErrorMessage("msgLogin", "Please fill all the required");
+			if(StringUtils.isBlank(username)) ((UIInput) Components.findComponent("frmLogin:username")).setValid(false);
+			if(StringUtils.isBlank(password)) ((UIInput) Components.findComponent("frmLogin:pwd")).setValid(false);
+			Messages.addError("msgLogin", "Please fill all the required");
 		}
 		return null;
 	}
@@ -60,50 +73,44 @@ public class LoginView extends BaseBean {
 	private boolean authService() {
 		boolean flag = false;
 		
-		if(!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
-			try {
-				String salt = "$AlT*P@$$w0Rd#";
-				String encryptedPwd = EncryptionUtil.getInstance().md5(password, salt);
-				UserLogin userLogin = new UserLogin(username, encryptedPwd);
-				Gson gson = new GsonBuilder().create();
+		try {
+			String salt = "$AlT*P@$$w0Rd#";
+			String encryptedPwd = EncryptionUtil.getInstance().md5(password, salt);
+			UserLogin userLogin = new UserLogin(username, encryptedPwd);
+			Gson gson = new GsonBuilder().create();
 //				String encryptedObject = EncryptionUtil.getInstance().aes(gson.toJson(userLogin), aesKey) ;
-				Response resp =  ClientBuilder.newClient()
-						.target(AUTH_URL)
-						.path(AUTH_PATH)
-						.request()
-						.header("val", gson.toJson(userLogin))
-						.get();
-				
-				String respStr = resp.readEntity(String.class);
-				if(respStr.contains("Not Found")) {
-					System.err.println("Service Not Found: " + AUTH_URL);
-				} else {
-					gson = new GsonBuilder().create();
-					userLogin = gson.fromJson(respStr, UserLogin.class);
+			Response resp =  ClientBuilder.newClient()
+					.target(AUTH_URL)
+					.path(AUTH_PATH)
+					.request()
+					.header("val", gson.toJson(userLogin))
+					.get();
+			
+			String respStr = resp.readEntity(String.class);
+			if(respStr.contains("Not Found")) {
+				Messages.addGlobalError("Auth Service not found!! or maybe service is not running. -> " + AUTH_URL);
+			} else {
+				gson = new GsonBuilder().create();
+				userLogin = gson.fromJson(respStr, UserLogin.class);
 
-					flag = userLogin.getLoginSuccess();
-					
-					if(flag) {
-						List<String> privs = new ArrayList<>();
-						for(String key : userLogin.getRolePrivileges().keySet()) {
-							privs.addAll(userLogin.getRolePrivileges().get(key));
-						}
-						List<String> distinctPrivs = privs.stream()
-													.sorted((p1, p2) -> p1.compareTo(p2))
-													.distinct()
-													.collect(Collectors.toList());
-						loginSession.username(userLogin.getUsername()).roles(userLogin.getRolePrivileges().keySet())
-									.rolePrivileges(userLogin.getRolePrivileges())
-									.distinctPrivileges(distinctPrivs);
+				flag = userLogin.getLoginSuccess();
+				
+				if(flag) {
+					List<String> privs = new ArrayList<>();
+					for(String key : userLogin.getRolePrivileges().keySet()) {
+						privs.addAll(userLogin.getRolePrivileges().get(key));
 					}
+					List<String> distinctPrivs = privs.stream()
+												.sorted((p1, p2) -> p1.compareTo(p2))
+												.distinct()
+												.collect(Collectors.toList());
+					loginSession.username(userLogin.getUsername()).roles(userLogin.getRolePrivileges().keySet())
+								.rolePrivileges(userLogin.getRolePrivileges())
+								.distinctPrivileges(distinctPrivs);
 				}
-			} catch(Exception e) {
-				e.printStackTrace();
 			}
-		} else {
-			if(StringUtils.isBlank(username)) ((UIInput) FacesContext.getCurrentInstance().getViewRoot().findComponent("frmLogin:username")).setValid(false);
-			if(StringUtils.isBlank(password)) ((UIInput) FacesContext.getCurrentInstance().getViewRoot().findComponent("frmLogin:pwd")).setValid(false);
-			MessageUtils.getInstance().addErrorMessage("msgLogin", "Please fill all the required");
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 		
 		return flag;
@@ -130,6 +137,22 @@ public class LoginView extends BaseBean {
 
 	public void setLoginSession(LoginSession loginSession) {
 		this.loginSession = loginSession;
+	}
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 
 }

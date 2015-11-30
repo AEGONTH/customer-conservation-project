@@ -70,10 +70,12 @@ public class FileDownloadView extends BaseBean {
 	
 	@PostConstruct
 	private void init() throws Throwable {
-		selectedDateFrom = null;
-		selectedDateTo = null;
 		try {
+			System.out.println("PostConstruct FileDownloadView");
+			reset();
+			System.out.println("Begin Prepare Date Range...");
 			prepareDateRange();
+			System.out.println("Finish");
 		} catch (Exception e) {
 			throw e;
 		}
@@ -287,24 +289,23 @@ public class FileDownloadView extends BaseBean {
 		criteria.setProjection(Projections.distinct(pjl));
 		
 		List<?> list = confirmationRecordService.findByCriteria(criteria);
-		Object[] objs = list.toArray();
-		selectionCycleFrom = new ArrayList<>();
-		selectionCycleFrom.add(new SelectItem(null, "Please Select"));
-		cycleTos = new ArrayList<>();
-//		selectionCycleTo = new ArrayList<>();
-//		selectionCycleTo.add(new SelectItem(null, "Please Select"));
-		
-		for(Object obj : objs) {
-			if(obj instanceof Object[]) {
-				Object[] innerObjs = (Object[]) obj;
-				if(innerObjs.length == 2) {
-					Date dFrom = DateUtil.convStringToDate(MS_SQL_DATE_PATTERN, innerObjs[0].toString());
-					Date dTo = DateUtil.convStringToDate(MS_SQL_DATE_PATTERN, innerObjs[1].toString());
-					selectionCycleFrom.add(new SelectItem(DateUtil.convDateToString(SIMPLE_DATE_PATTERN, dFrom), DateUtil.convDateToString(DISPLAY_DATE_PATTERN, dFrom)));
-					cycleTos.add(DateUtil.convDateToString(SIMPLE_DATE_PATTERN, dTo));
-//					selectionCycleTo.add(new SelectItem(DateUtil.convDateToString(SIMPLE_DATE_PATTERN, dTo), DateUtil.convDateToString(DISPLAY_DATE_PATTERN, dTo)));
-				} else {
-					System.err.println("ERR: obj[] length not eq to 2");
+		if(list.size() > 0) {
+			Object[] objs = list.toArray();
+			selectionCycleFrom = new ArrayList<>();
+			selectionCycleFrom.add(new SelectItem(null, "Please Select"));
+			cycleTos = new ArrayList<>();
+			
+			for(Object obj : objs) {
+				if(obj instanceof Object[]) {
+					Object[] innerObjs = (Object[]) obj;
+					if(innerObjs.length == 2) {
+						Date dFrom = DateUtil.convStringToDate(MS_SQL_DATE_PATTERN, innerObjs[0].toString());
+						Date dTo = DateUtil.convStringToDate(MS_SQL_DATE_PATTERN, innerObjs[1].toString());
+						selectionCycleFrom.add(new SelectItem(DateUtil.convDateToString(SIMPLE_DATE_PATTERN, dFrom), DateUtil.convDateToString(DISPLAY_DATE_PATTERN, dFrom)));
+						cycleTos.add(DateUtil.convDateToString(SIMPLE_DATE_PATTERN, dTo));
+					} else {
+						System.err.println("ERR: obj[] length not eq to 2");
+					}
 				}
 			}
 		}

@@ -10,7 +10,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.omnifaces.util.Faces;
+
 import com.adms.web.bean.login.LoginSession;
+
 
 public class AdminFilter extends AbstractFilter {
 
@@ -28,7 +31,7 @@ public class AdminFilter extends AbstractFilter {
 			doLogin(request, response, req);
 			return;
 		}
-		
+//		LoginSession ls = Faces.evaluateExpressionGet("#{loginSession}");
 		LoginSession loginSession = (LoginSession) session.getAttribute("loginSession");
 		if(loginSession == null || (loginSession != null && !loginSession.getDistinctPrivileges().contains("CS_ADMIN"))) {
 			accessDenied(request, response, req);

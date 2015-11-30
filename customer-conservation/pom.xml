@@ -8,8 +8,10 @@
 
 	<properties>
 		<jsf.version>2.2.10</jsf.version>
+		<primefaces.version>5.3</primefaces.version>
 		<spring.version>4.1.7.RELEASE</spring.version>
 		<font.awesome.version>4.4.0</font.awesome.version>
+		<atmosphere.runtime.version>2.4.0-RC7</atmosphere.runtime.version>
 	</properties>
 
 	<build>
@@ -72,8 +74,7 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>5.2</version>
-			<scope>compile</scope>
+			<version>${primefaces.version}</version>
 		</dependency>
 
 		<dependency>
@@ -194,19 +195,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-		<!-- Wildfly Weld -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.jboss.weld</groupId> -->
-		<!-- <artifactId>weld-core</artifactId> -->
-		<!-- <version>2.3.0.Final</version> -->
-		<!-- </dependency> -->
-
-		<!-- <dependency> -->
-		<!-- <groupId>org.jboss.weld</groupId> -->
-		<!-- <artifactId>weld-core-jsf</artifactId> -->
-		<!-- <version>2.3.0.Final</version> -->
-		<!-- </dependency> -->
-
+		
+		<!-- Atmosphere Framework -->
+		<dependency>
+			<groupId>org.atmosphere</groupId>
+			<artifactId>atmosphere-runtime</artifactId>
+			<version>${atmosphere.runtime.version}</version>
+		</dependency>
+			
 	</dependencies>
 </project>

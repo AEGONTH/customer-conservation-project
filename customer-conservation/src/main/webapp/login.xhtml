@@ -50,15 +50,29 @@
 								<i class="fa fa-user fa-3x aegon-color"></i>
 							</div>
 							<p:messages id="msgLogin" autoUpdate="false" globalOnly="false" closable="true"/>
-							<p:focus for="@next"/>
 							<p:inputText id="username" placeholder="Username" value="#{loginView.username}"/>
 							<p:password id="pwd" placeholder="Password" value="#{loginView.password}"/>
 							
 							<p:commandButton value="Sign in" action="#{loginView.doLogin}" update="@form" styleClass="btn btn-no-shadow btn-primary btn-sign-in w100"/>
 							<div style="margin-bottom:2em;"></div>
+							<p:focus for="@form"/>
 						</div>
 					</h:form>
 				</div>
+				
+				<ui:remove>
+				<h:form id="frmChangePwd">
+					<div style="text-align:center;margin-top: 10px;">
+						<p:commandLink value="Change Password" onclick="PF('dlgChgPwd').show()" style="font-size:0.75em;"></p:commandLink>
+					</div>
+					<p:dialog widgetVar="dlgChgPwd" modal="true" resizable="false" fitViewport="true">
+						<p:inputText placeholder="Username" value="#{loginView.username}"/>
+						<p:password placeholder="Old Password" value="#{loginView.password}"/>
+						<p:password placeholder="New Password" value="#{loginView.newPassword}"/>
+						<p:password placeholder="Confirm Password" value="#{loginView.confirmPassword}"/>
+					</p:dialog>
+				</h:form>
+				</ui:remove>
 			</div>
 		</div>
 	</ui:define>

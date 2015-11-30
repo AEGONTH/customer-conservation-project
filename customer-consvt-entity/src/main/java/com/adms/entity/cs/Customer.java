@@ -66,11 +66,11 @@ public class Customer extends BaseAuditDomain {
 	@Column(name="HOME_NO")
 	private String homeNo;
 	
-	@Column(name="MOBILE_NO_1")
-	private String mobileNo1;
+	@Column(name="MOBILE_NO")
+	private String mobileNo;
 	
-	@Column(name="MOBILE_NO_2")
-	private String mobileNo2;
+	@Column(name="OTHER_NO")
+	private String otherNo;
 	
 	@Column(name="OFFICE_NO")
 	private String officeNo;
@@ -163,20 +163,20 @@ public class Customer extends BaseAuditDomain {
 		this.homeNo = homeNo;
 	}
 
-	public String getMobileNo1() {
-		return mobileNo1;
+	public String getMobileNo() {
+		return mobileNo;
 	}
 
-	public void setMobileNo1(String mobileNo1) {
-		this.mobileNo1 = mobileNo1;
+	public void setMobileNo(String mobileNo1) {
+		this.mobileNo = mobileNo1;
 	}
 
-	public String getMobileNo2() {
-		return mobileNo2;
+	public String getOtherNo() {
+		return otherNo;
 	}
 
-	public void setMobileNo2(String mobileNo2) {
-		this.mobileNo2 = mobileNo2;
+	public void setOtherNo(String mobileNo2) {
+		this.otherNo = mobileNo2;
 	}
 
 	public String getOfficeNo() {
@@ -191,8 +191,8 @@ public class Customer extends BaseAuditDomain {
 	public String toString() {
 		return "Customer [id=" + id + ", title=" + title + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", fullName=" + fullName + ", citizenId=" + citizenId + ", passportId=" + passportId + ", gender="
-				+ gender + ", dob=" + dob + ", marital=" + marital + ", homeNo=" + homeNo + ", mobileNo1=" + mobileNo1
-				+ ", mobileNo2=" + mobileNo2 + ", officeNo=" + officeNo + "]";
+				+ gender + ", dob=" + dob + ", marital=" + marital + ", homeNo=" + homeNo + ", mobileNo1=" + mobileNo
+				+ ", mobileNo2=" + otherNo + ", officeNo=" + officeNo + "]";
 	}
 
 	public String getNationality() {

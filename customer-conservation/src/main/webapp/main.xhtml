@@ -12,7 +12,6 @@
 		<title>Customer Conservation</title>
 		
 		<style>
-			
 		</style>
 	</ui:define>
 	
@@ -23,12 +22,7 @@
 					<h:outputText value="Hello"/>	
 				</f:facet>
 				<h:outputText value="Welcome to Customer Conservation Platform." />
-				
-				<ui:remove>
-				<p:commandLink value="Go to System Admin Page" 
-					action="protected/admin?faces-redirect=true" 
-					ajax="false" rendered="#{loginSession.privAdmin()}"/>
-				</ui:remove>
+				<br/>
 			</p:panel>
 		</h:form>
 	</ui:define>

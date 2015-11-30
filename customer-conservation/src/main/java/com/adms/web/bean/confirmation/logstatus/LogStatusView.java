@@ -84,7 +84,9 @@ public class LogStatusView extends BaseBean {
 		inRemark = null;
 		dtRowPerPage = 5;
 		try {
+			System.out.println("Post Construct LogStatusView");
 			prepareCycleDateSelection();
+			System.out.println("Finish");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -146,9 +148,14 @@ public class LogStatusView extends BaseBean {
 			prepareAddLogStatus();
 			if(modLogStatus.getAction() != null) {
 				selectedAction = modLogStatus.getAction().getParamKey();
+			} else {
+				selectedAction = null;
 			}
+			
 			if(!StringUtils.isBlank(modLogStatus.getRemark())) {
 				inRemark = modLogStatus.getRemark();
+			} else {
+				inRemark = null;
 			}
 			
 			rc.execute("PF('addActionDlg').show();");

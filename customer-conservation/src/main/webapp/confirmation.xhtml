@@ -11,6 +11,7 @@
 		<title>Confirmation</title>
 		<style>
 			.box-btn{min-height: 5em;}
+			.fa.fa-2x.ui-icon {height: 26px;}
 		</style>
 	</ui:define>
 	
@@ -18,13 +19,13 @@
 		<h:form id="frmConfMain">
 			<p:panelGrid columns="3" layout="grid" styleClass="grid-borderless grid-row-gap">
 				<p:commandButton value="File Upload" icon="fa fa-upload fa-2x fa-fw"
-				process="@this" action="#{navigatorBean.toFileUploadPage}" styleClass="w100 btn-orange btn-no-shadow box-btn"/>
+				process="@this" ajax="false" action="#{navigatorBean.toFileUploadPage}" styleClass="w100 btn-orange btn-no-shadow box-btn"/>
 				
 				<p:commandButton value="Log Status" icon="fa fa-plus-circle fa-2x fa-fw" 
-				process="@this" action="#{navigatorBean.toAddLogPage}" styleClass="w100 btn-green btn-no-shadow box-btn"/>
+				process="@this" ajax="false" action="#{navigatorBean.toAddLogPage}" styleClass="w100 btn-green btn-no-shadow box-btn"/>
 				
 				<p:commandButton value="File Download" icon="fa fa-cloud-download fa-2x fa-fw"
-				process="@this" action="#{navigatorBean.toFileDownloadPage}" styleClass="w100 btn-primary btn-no-shadow box-btn"/>
+				process="@this" ajax="false" action="#{navigatorBean.toFileDownloadPage}" styleClass="w100 btn-primary btn-no-shadow box-btn"/>
 			</p:panelGrid>
 		</h:form>
 	</ui:define>

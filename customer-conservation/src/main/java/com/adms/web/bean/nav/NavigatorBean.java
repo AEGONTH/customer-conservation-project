@@ -18,6 +18,12 @@ public class NavigatorBean {
 	private final String TO_FILE_UPLOAD_PAGE = "/confirmation/upload";
 	private final String TO_ADD_LOG_PAGE = "/confirmation/addlog";
 	private final String TO_FILE_DOWNLOAD_PAGE = "/confirmation/download";
+	
+	//OMNI Channel
+	private final String TO_OMNI_CH_MAIN_PAGE = "/omni/main-omni";
+	
+	private final String TO_CHAT_PAGE = "/primepush/chat";
+	private final String TO_COUNTER_PAGE = "/primepush/counter";
 
 	public String mainMenu() throws Exception {
 		return TO_MAIN_PAGE + REDIRECT_PARAM;
@@ -45,5 +51,17 @@ public class NavigatorBean {
 	
 	public String toFileDownloadPage() throws Throwable {
 		return TO_FILE_DOWNLOAD_PAGE + REDIRECT_PARAM;
+	}
+	
+	public String toChatPage() throws Throwable {
+		return TO_CHAT_PAGE + REDIRECT_PARAM;
+	}
+	
+	public String toCounterPage() throws Throwable {
+		return TO_COUNTER_PAGE + REDIRECT_PARAM;
+	}
+	
+	public String toOmniChMainPage() throws Throwable {
+		return TO_OMNI_CH_MAIN_PAGE + REDIRECT_PARAM;
 	}
 }

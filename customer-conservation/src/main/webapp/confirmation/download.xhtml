@@ -24,13 +24,13 @@
 				<div class=" dl-box">
 					<p:panelGrid id="gridDL" columns="2" layout="grid" columnClasses="" styleClass="grid-borderless">
 						<h:outputText value="From" />
-						<p:selectOneMenu value="#{fileDownloadView.selectedDateFrom}" styleClass="w100" style="margin-top:-5px;">
+						<p:selectOneMenu value="#{fileDownloadView.selectedDateFrom}" styleClass="" style="margin-top:-5px;">
 							<p:ajax process="@this" listener="#{fileDownloadView.cycleListener}" update="cycleTo"/>
 							<f:selectItems value="#{fileDownloadView.selectionCycleFrom}"/>
 						</p:selectOneMenu>
 					
 						<h:outputText value="To" />
-						<p:selectOneMenu id="cycleTo" value="#{fileDownloadView.selectedDateTo}" disabled="#{fileDownloadView.selectedDateFrom eq null}" styleClass="w100" style="margin-top:-5px;">
+						<p:selectOneMenu id="cycleTo" value="#{fileDownloadView.selectedDateTo}" disabled="#{fileDownloadView.selectedDateFrom eq null}" styleClass="" style="margin-top:-5px;">
 							<f:selectItems value="#{fileDownloadView.selectionCycleTo}"/>
 						</p:selectOneMenu>
 					</p:panelGrid>
