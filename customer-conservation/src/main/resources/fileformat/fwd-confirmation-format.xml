@@ -5,8 +5,10 @@
 			<DataCell row="1" column="A" dataType="TEXT" fieldName="companyName" autoTrim="TRUE" />
 			<DataCell row="2" column="A" dataType="TEXT" fieldName="periodTxt" autoTrim="TRUE" />
 			
-			<DataRecord listSourceName="dataList" beginRow="6" endRow="9999">
+			<DataRecord listSourceName="dataList" beginRow="1" endRow="9999">
 				
+			    <BeginRecordCondition column="A" comparator="EQ" checkValue="No." firstRowAsData="FALSE" />
+			    
 				<DataCell row="1" column="A" dataType="TEXT" fieldName="no" autoTrim="TRUE"/>
 				<DataCell row="1" column="B" dataType="TEXT" fieldName="appDateYear" autoTrim="TRUE" />
 				<DataCell row="1" column="C" dataType="TEXT" fieldName="appDateMonth" autoTrim="TRUE" />

@@ -31,6 +31,10 @@ public class LoginSession extends BaseBean {
 		Faces.redirect(Faces.getRequestContextPath() + "/login");
 	}
 	
+	public void toChgPwd() throws Exception {
+		Faces.redirect(Faces.getRequestContextPath() + "/changepwd");
+	}
+	
 	public void invalidateSession() throws Exception {
 		Faces.invalidateSession();
 	}

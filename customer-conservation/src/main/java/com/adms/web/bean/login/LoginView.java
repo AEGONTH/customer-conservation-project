@@ -32,6 +32,8 @@ public class LoginView extends BaseBean {
 
 	private final String AUTH_URL = "http://10.66.0.16:8080/authen-ws/rest/authservice";
 	private final String AUTH_PATH = "auth";
+	private final String CHG_PWD_PATH = "chgpwd";
+	private final String SALT_PWD = "$AlT*P@$$w0Rd#";
 	
 	@ManagedProperty(value="#{loginSession}")
 	private LoginSession loginSession;
@@ -70,12 +72,62 @@ public class LoginView extends BaseBean {
 		return null;
 	}
 	
+	public void doChangePwd() throws Exception {
+		String username = loginSession.getUsername();
+		if(!StringUtils.isBlank(username)) {
+			if(password.equals(newPassword)) {
+				//same password!
+				((UIInput) Components.findComponent("chgPwdForm:pwd")).setValid(false);
+				((UIInput) Components.findComponent("chgPwdForm:newPwd")).setValid(false);
+				Messages.addError("chgPwdMsg", "Both old and new password are same value.");
+				return;
+			}
+			
+			if(!newPassword.equals(confirmPassword)) {
+				//new password not matched!
+				((UIInput) Components.findComponent("chgPwdForm:newPwd")).setValid(false);
+				((UIInput) Components.findComponent("chgPwdForm:confPwd")).setValid(false);
+				Messages.addError("chgPwdMsg", "The new passowrd you typed, not matched.");
+				return;
+			}
+			
+			String oldPwd = EncryptionUtil.getInstance().md5(password, SALT_PWD);
+			String newPwd = EncryptionUtil.getInstance().md5(newPassword, SALT_PWD);
+			
+			UserLogin userLogin = new UserLogin(username, oldPwd).setNewPwd(newPwd);
+			Gson gson = new GsonBuilder().create();
+			try {
+				Response resp =  ClientBuilder.newClient()
+						.target(AUTH_URL)
+						.path(CHG_PWD_PATH)
+						.request()
+						.header("val", gson.toJson(userLogin))
+						.get();
+				
+				String respStr = resp.readEntity(String.class);
+				
+				gson = new GsonBuilder().create();
+				userLogin = gson.fromJson(respStr, UserLogin.class);
+				
+				if(userLogin.getLoginSuccess()) {
+					Messages.addInfo("chgPwdMsg", "Your password has been changed.");
+				} else {
+					Messages.addError("chgPwdMsg", "Wrong Password.");
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+				Messages.addError("chgPwdMsg", "Something went wrong! please try agian.");
+			}
+		} else {
+			loginSession.signOut();
+		}
+	}
+	
 	private boolean authService() {
 		boolean flag = false;
 		
 		try {
-			String salt = "$AlT*P@$$w0Rd#";
-			String encryptedPwd = EncryptionUtil.getInstance().md5(password, salt);
+			String encryptedPwd = EncryptionUtil.getInstance().md5(password, SALT_PWD);
 			UserLogin userLogin = new UserLogin(username, encryptedPwd);
 			Gson gson = new GsonBuilder().create();
 //				String encryptedObject = EncryptionUtil.getInstance().aes(gson.toJson(userLogin), aesKey) ;

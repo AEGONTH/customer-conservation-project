@@ -84,9 +84,7 @@ public class LogStatusView extends BaseBean {
 		inRemark = null;
 		dtRowPerPage = 5;
 		try {
-			System.out.println("Post Construct LogStatusView");
 			prepareCycleDateSelection();
-			System.out.println("Finish");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
