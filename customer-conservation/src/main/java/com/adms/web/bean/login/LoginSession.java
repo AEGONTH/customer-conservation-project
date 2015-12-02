@@ -61,12 +61,6 @@ public class LoginSession extends BaseBean {
 						|| distinctPrivileges.contains("SYSTEM_ADMIN"));
 	}
 	
-	public boolean privOmniCh() throws Throwable {
-		return distinctPrivileges != null 
-				&& (distinctPrivileges.contains("OMNI_CHANNEL_SALES")
-						|| distinctPrivileges.contains("SYSTEM_ADMIN"));
-	}
-	
 	public void checkPermissions() throws Throwable {
 		if(distinctPrivileges == null) {
 			signOut();

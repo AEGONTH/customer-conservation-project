@@ -130,13 +130,6 @@
 							action="#{navigatorBean.confirmationMenu}"
 							rendered="#{loginSession.privConfCall()}"/>
 						
-						<p:separator styleClass="menu-separate" rendered="#{loginSession.privOmniCh()}"/>
-						<p:menuitem id="menuOmniCH" 
-							value="Omni CH." containerStyleClass="menu-item" 
-							icon="fa fa-phone-square fa-lg fa-fw" ajax="false" 
-							action="#{navigatorBean.toOmniChMainPage}"
-							rendered="#{loginSession.privOmniCh()}"/>
-						
 						<ui:remove><!-- Disabled language selection on bar -->
 						<f:facet name="options">
 							<div class="lang-div">

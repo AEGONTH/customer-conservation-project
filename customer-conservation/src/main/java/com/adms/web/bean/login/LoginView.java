@@ -14,13 +14,11 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
 import org.omnifaces.util.Components;
-import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 
 import com.adms.common.entity.UserLogin;
 import com.adms.utils.EncryptionUtil;
 import com.adms.web.base.bean.BaseBean;
-import com.adms.web.bean.nav.NavigatorBean;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -52,12 +50,10 @@ public class LoginView extends BaseBean {
 	public String doLogin() throws Throwable {
 		if(!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
 			if(authService()) {
-				NavigatorBean nav = Faces.evaluateExpressionGet("#{navigatorBean}");
+//				NavigatorBean nav = Faces.evaluateExpressionGet("#{navigatorBean}");
 				
 				if(!loginSession.privSysAdmin()) {
-					if(loginSession.privOmniCh()) {
-						return nav.toOmniChMainPage();
-					}
+					
 				}
 				
 				return "main?faces-redirect=true";
