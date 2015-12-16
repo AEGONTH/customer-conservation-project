@@ -39,7 +39,7 @@ public class CallLog extends BaseAuditDomain {
 	private Customer customer;
 	
 	@ManyToOne
-	@JoinColumn(name="REFERENCE_NO", referencedColumnName="REFERENCE_NO")
+	@JoinColumn(name="CUSTOMER_YES_REC_ID")
 	private CustomerYesRecord customerYesRecord;
 	
 	@Column(name="POLICY_NO")

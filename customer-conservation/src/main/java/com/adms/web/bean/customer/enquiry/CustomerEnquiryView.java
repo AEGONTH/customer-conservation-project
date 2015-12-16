@@ -256,14 +256,20 @@ public class CustomerEnquiryView extends BaseBean {
 	
 	public void doVisibleLogHistory(CustomerYesRecord obj) throws Exception {
 		model.setPolicy(obj);
+		List<CallLog> list = null;
 		
 		DetachedCriteria criteria = DetachedCriteria.forClass(CallLog.class);
 		DetachedCriteria customerYes = criteria.createCriteria("customerYesRecord", JoinType.INNER_JOIN);
-		customerYes.add(Restrictions.eq("sales.xReference", obj.getSales().getxReference()));
+
+		if(obj.getSales() != null) {
+			customerYes.add(Restrictions.eq("sales.xReference", obj.getSales().getxReference()));
+		} else {
+			customerYes.add(Restrictions.eq("policyNo", obj.getPolicyNo()));
+		}
 		
 		criteria.addOrder(Order.desc("id"));
 		
-		List<CallLog> list = callLogService.findByCriteria(criteria);
+		list = callLogService.findByCriteria(criteria);
 		if(list != null && !list.isEmpty()) {
 			this.model.setPolicyCallLogs(list);
 		} else {
@@ -338,18 +344,6 @@ public class CustomerEnquiryView extends BaseBean {
 			selectedCallLog = null;
 			rc.update("frmMain:panelLogHistTbl");
 			rc.execute("PF('addCaseDlg').hide();");
-		}
-	}
-	
-	public void doTest() {
-		try {
-			DetachedCriteria criteria = DetachedCriteria.forClass(Sales.class);
-			criteria.add(Restrictions.eq("xReference", "58256220621"));
-			
-			List<Sales> list = salesService.findByCriteria(criteria);
-			System.out.println(list.size());
-		} catch(Exception e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -466,6 +460,7 @@ public class CustomerEnquiryView extends BaseBean {
 			if(!StringUtils.isBlank(shFirstName)) criteria.add(Restrictions.like("firstName", shFirstName.trim().toUpperCase(), MatchMode.ANYWHERE));
 			if(!StringUtils.isBlank(shLastName)) criteria.add(Restrictions.like("lastName", shLastName.trim().toUpperCase(), MatchMode.ANYWHERE));
 			if(shDOB != null) criteria.add(Restrictions.eq("dob", shDOB));
+			criteria.add(Restrictions.eq("visible", "Y"));
 			
 			return customerService.findByCriteria(criteria);
 		} catch(Exception e) {
@@ -477,7 +472,8 @@ public class CustomerEnquiryView extends BaseBean {
 	private List<CustomerYesRecord> findPolicyByCustomer() {
 		try {
 			DetachedCriteria criteria = DetachedCriteria.forClass(CustomerYesRecord.class);
-			criteria.add(Restrictions.eq("customer.citizenId", this.model.getCustomer().getCitizenId()));
+			criteria.createCriteria("customer").add(Restrictions.eq("citizenId", this.model.getCustomer().getCitizenId()));
+//			criteria.add(Restrictions.eq("customer.citizenId", this.model.getCustomer().getCitizenId()));
 			return customerYesRecordService.findByCriteria(criteria);
 		} catch(Exception e) {
 			e.printStackTrace();

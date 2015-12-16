@@ -40,9 +40,15 @@ public class CustomerYesRecord extends BaseAuditDomain {
 	@JoinColumn(name="REFERENCE_NO", referencedColumnName="X_REFERENCE")
 	private Sales sales;
 	
+	@Column(name="POLICY_NO")
+	private String policyNo;
+	
 	@ManyToOne
-	@JoinColumn(name="INSURED_CITIZEN_ID", referencedColumnName="CITIZEN_ID")
+	@JoinColumn(name="CUSTOMER_ID")
 	private Customer customer;
+	
+	@Column(name="INSURED_CITIZEN_ID")
+	private String insuredCitizenId;
 	
 	@Column(name="INSURED_OCCUPATION")
 	private String insuredOccupation;
@@ -557,6 +563,22 @@ public class CustomerYesRecord extends BaseAuditDomain {
 
 	public void setBene5Percent(String bene5Percent) {
 		this.bene5Percent = bene5Percent;
+	}
+
+	public String getInsuredCitizenId() {
+		return insuredCitizenId;
+	}
+
+	public void setInsuredCitizenId(String insuredCitizenId) {
+		this.insuredCitizenId = insuredCitizenId;
+	}
+
+	public String getPolicyNo() {
+		return policyNo;
+	}
+
+	public void setPolicyNo(String policyNo) {
+		this.policyNo = policyNo;
 	}
 	
 }
