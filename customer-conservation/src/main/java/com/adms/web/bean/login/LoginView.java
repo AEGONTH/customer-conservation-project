@@ -140,11 +140,17 @@ public class LoginView extends BaseBean {
 			} else {
 				gson = new GsonBuilder().create();
 				userLogin = gson.fromJson(respStr, UserLogin.class);
-
+				
 				flag = userLogin.getLoginSuccess();
 				
 				if(flag) {
 					List<String> privs = new ArrayList<>();
+					
+					if(userLogin.getRolePrivileges() == null) {
+						Messages.addGlobalError("Cannot get permission");
+						return false;
+					}
+					
 					for(String key : userLogin.getRolePrivileges().keySet()) {
 						privs.addAll(userLogin.getRolePrivileges().get(key));
 					}
@@ -158,7 +164,8 @@ public class LoginView extends BaseBean {
 				}
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+			Messages.addError("msgLogin", "Error while Auth Service. | " + e.getMessage());
+			flag = false;
 		}
 		
 		return flag;

@@ -143,6 +143,9 @@
 						</ui:remove>
 					</p:menubar>
 				</div>
+				<p:idleMonitor timeout="1500000" >
+					<p:ajax event="idle" listener="#{loginSession.signOut}"/>
+				</p:idleMonitor>
 			</h:form>
 			
 			<div class="wrapper" style="margin-top:5px;">

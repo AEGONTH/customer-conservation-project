@@ -1,12 +1,14 @@
 package com.adms.web.bean.customer.enquiry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -36,7 +38,6 @@ import com.adms.entity.cs.CustomerYesRecord;
 import com.adms.entity.cs.LogDetailCategory;
 import com.adms.entity.cs.LogStatusGroup;
 import com.adms.entity.cs.LogValue;
-import com.adms.entity.sale.Sales;
 import com.adms.sales.service.SalesService;
 import com.adms.util.MessageUtils;
 import com.adms.utils.DateUtil;
@@ -81,6 +82,9 @@ public class CustomerEnquiryView extends BaseBean {
 	private String shFirstName;
 	private String shLastName;
 	private Date shDOB;
+	private String shTel;
+	
+	private boolean addNew;
 	
 //	Add Case Parameters
 	private static final String PLEASE_SELECT = "Please Select";
@@ -106,10 +110,6 @@ public class CustomerEnquiryView extends BaseBean {
 	
 	}
 	
-	public void onSelectRow(SelectEvent event) {
-		System.out.println("select: " + event.getObject());
-	}
-	
 	@PostConstruct
 	private void init() {
 		csMsg = ResourceBundle.getBundle("com.adms.msg.cs.csMsg", new Locale(language.getLocaleCode()));
@@ -121,8 +121,6 @@ public class CustomerEnquiryView extends BaseBean {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-//		String renderKitId = FacesContext.getCurrentInstance().getViewRoot().getRenderKitId(); 
-//		System.out.println("renderKitId: " + renderKitId);
 	}
 	
 	private void initGroupStatus() throws Exception {
@@ -215,21 +213,39 @@ public class CustomerEnquiryView extends BaseBean {
 		shDOB = null;
 		shFirstName = null;
 		shLastName = null;
+		shTel = null;
+		addNew = false;
+		RequestContext.getCurrentInstance().update("frmMain:searchDlg");
 	}
 	
-	public void doSearch() throws Exception {
-		RequestContext rc = RequestContext.getCurrentInstance();
-		if(StringUtils.isBlank(shCitizenId) 
+	public void clearAddCaseLog() {
+		initAllDropdownMenu();
+		model.setLogDetail(null);
+		model.setResultDetail(null);
+		model.setCorrectiveAction(null);
+		model.setSuggestDetail(null);
+		model.setLogRemark(null);
+		selectedCallLog = null;
+	}
+	
+	private boolean validateIsShEmpty() {
+		return StringUtils.isBlank(shCitizenId) 
+				&& StringUtils.isBlank(shTel)
 				&& StringUtils.isBlank(shFirstName) 
 				&& StringUtils.isBlank(shLastName)
-				&& shDOB == null) {
+				&& shDOB == null;
+	}
+
+	public void doSearch() throws Exception {
+		RequestContext rc = RequestContext.getCurrentInstance();
+		if(validateIsShEmpty()) {
 			rc.execute("PF('searchDlg').jq.effect('shake', {times:5}, 100);");
 			
-			MessageUtils.getInstance().addErrorMessage("msgGrowl", "Please fills at least 1 field.");
+			MessageUtils.getInstance().addErrorMessage("msgGrowl", this.csMsg.getString("please.fill.1.field"));
 			rc.update("frmMain:msgGrowl");
 		} else {
 			if(shDOB != null && shDOB.compareTo(DateUtil.getCurrentDate()) > 0) {
-				MessageUtils.getInstance().addErrorMessage("msgGrowl", "DOB must not exeed today");
+				MessageUtils.getInstance().addErrorMessage("msgGrowl", this.csMsg.getString("dob.must.exeed.today"));
 				rc.update("frmMain:msgGrowl");
 				return;
 			}
@@ -237,8 +253,9 @@ public class CustomerEnquiryView extends BaseBean {
 			List<Customer> list = findCustomer();
 			
 			if(list.isEmpty()) {
-				MessageUtils.getInstance().addErrorMessage("msgGrowl", "Customer not Found.");
-				rc.update("frmMain:msgGrowl");
+				MessageUtils.getInstance().addErrorMessage("msgGrowl", this.csMsg.getString("search.not.found"));
+				addNew = true;
+				rc.update(Arrays.asList("frmMain:panelBtnAdd", "frmMain:msgGrowl"));
 			} else if(list.size() == 1) {
 				model.setCustomer(list.get(0));
 				clearSh();
@@ -254,6 +271,86 @@ public class CustomerEnquiryView extends BaseBean {
 		}
 	}
 	
+	public void doAddNewCustomer() {
+		RequestContext rc = RequestContext.getCurrentInstance();
+		final String msgGrowlId = "frmMain:msgGrowl";
+		if(validateIsShEmpty()) {
+			rc.execute("PF('searchDlg').jq.effect('shake', {times:5}, 100);");
+			MessageUtils.getInstance().addErrorMessage("msgGrowl", this.csMsg.getString("please.fill.1.field"));
+			rc.update(msgGrowlId);
+		} else {
+			if(shDOB != null && shDOB.compareTo(DateUtil.getCurrentDate()) > 0) {
+				MessageUtils.getInstance().addErrorMessage("msgGrowl", this.csMsg.getString("dob.must.exeed.today"));
+				rc.update(msgGrowlId);
+				return;
+			}
+			
+			if(StringUtils.isBlank(shFirstName) || StringUtils.isBlank(shLastName)) {
+				MessageUtils.getInstance().addErrorMessage("msgGrowl", this.csMsg.getString("error.required.firstname.lastname"));
+				((UIInput) FacesContext.getCurrentInstance().getViewRoot().findComponent("frmMain:shInsuredFname")).setValid(false);
+				((UIInput) FacesContext.getCurrentInstance().getViewRoot().findComponent("frmMain:shInsuredLname")).setValid(false);
+				rc.update(msgGrowlId);
+				return;
+			}
+			
+			if(StringUtils.isBlank(shCitizenId) && StringUtils.isBlank(shTel)) {
+				MessageUtils.getInstance().addErrorMessage("msgGrowl", this.csMsg.getString("error.required.citizen.or.tel"));
+				rc.update(msgGrowlId);
+				return;
+			}
+			
+			List<Customer> list = findCustomer();
+			
+			if(!list.isEmpty()) {
+				MessageUtils.getInstance().addErrorMessage("msgGrowl", this.csMsg.getString("error.customer.already.exist"));
+				rc.update(Arrays.asList("frmMain:panelBtnAdd", msgGrowlId));
+				addNew = false;
+				return;
+			}
+			
+			Customer customer = new Customer();
+			customer.setFirstName(shFirstName.toUpperCase().trim())
+					.setLastName(shLastName.toUpperCase().trim())
+					.setCitizenId(shCitizenId)
+					.setMobileNo(shTel)
+					.setVisible("Y")
+					;
+			try {
+				customer = customerService.add(customer, loginSession.getUsername());
+			} catch (Exception e) {
+				MessageUtils.getInstance().addErrorMessage("msgGrowl", "System Error! Please contact system admin.: " + e.getMessage());
+				rc.update(msgGrowlId);
+				return;
+			}
+			
+			model.setCustomer(customer);
+			clearSh();
+			logicPolicyByCus();
+			rc.execute("PF('searchDlg').hide();");
+			rc.update("frmMain");
+		}
+	}
+	
+	public void doAddDummyDataForNonCustomer() throws Exception {
+		CustomerYesRecord dummyPolicy = new CustomerYesRecord();
+		dummyPolicy.setImportDate(new Date());
+		dummyPolicy.setPolicyNo("NonCust-" + model.getCustomer().getId());
+		dummyPolicy.setCustomer(model.getCustomer());
+		dummyPolicy.setEffectiveDate(new Date());
+		dummyPolicy = customerYesRecordService.add(dummyPolicy, loginSession.getUsername());
+		
+		List<CustomerPolicyBean> policyBeans = new ArrayList<>();
+		policyBeans.add(new CustomerPolicyBean().setCustomerYesRecord(dummyPolicy)
+												.setCampaignName(model.OTHER_CAMPAIGN_NAME)
+												.setRefNo(dummyPolicy.getPolicyNo())
+												.setPremium(0D)
+												.setObjectDate(dummyPolicy.getEffectiveDate()));
+		model.setCustomerYRs2(policyBeans);
+		model.setNonCustomer(false);
+		
+		doVisibleLogHistory(dummyPolicy);
+	}
+
 	public void doVisibleLogHistory(CustomerYesRecord obj) throws Exception {
 		model.setPolicy(obj);
 		List<CallLog> list = null;
@@ -301,7 +398,7 @@ public class CustomerEnquiryView extends BaseBean {
 			model.setSelectedSubCategory(callLog.getCallLogDetail().getLogValue().getId());
 			model.setLogDetail(callLog.getDetail());
 			model.setSelectedComplaintStatus(callLog.getLogCurrentStatus().getId());
-			model.setSelectedComplaintResult(callLog.getLogResult().getId());
+			model.setSelectedComplaintResult(callLog.getLogResult() != null ? callLog.getLogResult().getId() : null);
 			model.setResultDetail(callLog.getLogResultDetail());
 			model.setCorrectiveAction(callLog.getCorrectiveAction());
 			model.setSuggestDetail(callLog.getSuggestDetail());
@@ -309,17 +406,13 @@ public class CustomerEnquiryView extends BaseBean {
 		}
 	}
 	
-	public void onRowSelectLog(SelectEvent event) {
-		doInitLog((CallLog) event.getObject());
-    }
-	
 	public void doAddCallLog() throws Exception {
 		if(model == null) throw new Exception("ERROR, please refresh page");
 		RequestContext rc = RequestContext.getCurrentInstance();
 		
 		boolean flag = validateAddCaseLog();
 		if(!flag) {
-			MessageUtils.getInstance().addErrorMessage("msgAddCase", "Please enter data in the required fields.");
+			MessageUtils.getInstance().addErrorMessage("msgAddCase", this.csMsg.getString("error.required.some"));
 			rc.update("frmMain:panelLogDetail");
 		} else {
 			saveCallLog(
@@ -346,17 +439,19 @@ public class CustomerEnquiryView extends BaseBean {
 			rc.execute("PF('addCaseDlg').hide();");
 		}
 	}
+
+	public void onRowSelectLog(SelectEvent event) {
+		doInitLog((CallLog) event.getObject());
+    }
 	
-	public void clearAddCaseLog() {
-		initAllDropdownMenu();
-		model.setLogDetail(null);
-		model.setResultDetail(null);
-		model.setCorrectiveAction(null);
-		model.setSuggestDetail(null);
-		model.setLogRemark(null);
-		selectedCallLog = null;
+	public void onSelectCustomer(SelectEvent event) {
+		clearSh();
+		model.setCustomerFounds(null);
+		model.setCustomerYRs(null);
+		model.setPolicyCallLogs(null);
+		logicPolicyByCus();
 	}
-	
+
 	private boolean validateAddCaseLog() {
 		//Message ID: frmMain:msgAddCase
 		//frmMain:logSourceName
@@ -436,27 +531,40 @@ public class CustomerEnquiryView extends BaseBean {
 		}
 	}
 	
-	public void onSelectCustomer(SelectEvent event) {
-		clearSh();
-		model.setCustomerFounds(null);
-		model.setCustomerYRs(null);
-		model.setPolicyCallLogs(null);
-		logicPolicyByCus();
-	}
-
 	private void logicPolicyByCus() {
 		List<CustomerYesRecord> list = findPolicyByCustomer();
+		List<CustomerPolicyBean> policyBeans = new ArrayList<>();
+		
 		if(list != null && !list.isEmpty()) {
-			model.setCustomerYRs(list);
+			policyBeans = list.stream()
+					.map(m -> new CustomerPolicyBean()
+						.setCustomerYesRecord(m)
+						.setCampaignName(m.getSales() != null ? m.getSales().getListLot().getCampaign().getCampaignName() : model.OTHER_CAMPAIGN_NAME)
+						.setObjectDate(m.getSales() != null ? m.getSales().getSaleDate() : m.getEffectiveDate())
+						.setRefNo(m.getSales() != null ? m.getSales().getxReference() : m.getPolicyNo())
+						.setPremium(m.getSales() != null ? m.getSales().getPremium().doubleValue() : m.getPremium().doubleValue()))
+					.collect(Collectors.toList());
+			model.setNonCustomer(false);
 		} else {
-			model.setCustomerYRs(new ArrayList<>());
+			model.setNonCustomer(true);
 		}
+		
+		model.setCustomerYRs2(policyBeans);
+		
 	}
 	
 	private List<Customer> findCustomer() {
 		try {
 			DetachedCriteria criteria = DetachedCriteria.forClass(Customer.class);
 			if(!StringUtils.isBlank(shCitizenId)) criteria.add(Restrictions.eq("citizenId", shCitizenId));
+			if(!StringUtils.isBlank(shTel)) {
+				criteria.add(Restrictions
+						.disjunction()
+							.add(Restrictions.eq("homeNo", shTel))
+							.add(Restrictions.eq("mobileNo", shTel))
+							.add(Restrictions.eq("otherNo", shTel))
+							.add(Restrictions.eq("officeNo", shTel)));
+			}
 			if(!StringUtils.isBlank(shFirstName)) criteria.add(Restrictions.like("firstName", shFirstName.trim().toUpperCase(), MatchMode.ANYWHERE));
 			if(!StringUtils.isBlank(shLastName)) criteria.add(Restrictions.like("lastName", shLastName.trim().toUpperCase(), MatchMode.ANYWHERE));
 			if(shDOB != null) criteria.add(Restrictions.eq("dob", shDOB));
@@ -472,8 +580,7 @@ public class CustomerEnquiryView extends BaseBean {
 	private List<CustomerYesRecord> findPolicyByCustomer() {
 		try {
 			DetachedCriteria criteria = DetachedCriteria.forClass(CustomerYesRecord.class);
-			criteria.createCriteria("customer").add(Restrictions.eq("citizenId", this.model.getCustomer().getCitizenId()));
-//			criteria.add(Restrictions.eq("customer.citizenId", this.model.getCustomer().getCitizenId()));
+			criteria.createCriteria("customer").add(Restrictions.eq("id", this.model.getCustomer().getId()));
 			return customerYesRecordService.findByCriteria(criteria);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -578,6 +685,22 @@ public class CustomerEnquiryView extends BaseBean {
 	
 	public void setLoginSession(LoginSession loginSession) {
 		this.loginSession = loginSession;
+	}
+
+	public String getShTel() {
+		return shTel;
+	}
+
+	public void setShTel(String shTel) {
+		this.shTel = shTel;
+	}
+
+	public boolean isAddNew() {
+		return addNew;
+	}
+
+	public void setAddNew(boolean addNew) {
+		this.addNew = addNew;
 	}
 
 }

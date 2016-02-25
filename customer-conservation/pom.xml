@@ -11,7 +11,6 @@
 		<primefaces.version>5.3</primefaces.version>
 		<spring.version>4.1.7.RELEASE</spring.version>
 		<font.awesome.version>4.4.0</font.awesome.version>
-		<atmosphere.runtime.version>2.4.0-RC7</atmosphere.runtime.version>
 	</properties>
 
 	<build>
@@ -194,13 +193,6 @@
 					<groupId>org.springframework</groupId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		
-		<!-- Atmosphere Framework -->
-		<dependency>
-			<groupId>org.atmosphere</groupId>
-			<artifactId>atmosphere-runtime</artifactId>
-			<version>${atmosphere.runtime.version}</version>
 		</dependency>
 			
 	</dependencies>
